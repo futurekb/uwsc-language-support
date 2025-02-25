@@ -1,0 +1,43 @@
+{
+  "name": "uwsc-language-support",
+  "displayName": "UWSC Language Support",
+  "description": "UWSC language support for VS Code",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "activationEvents": [
+    "onLanguage:UWSC",
+    "onLanguage:uws"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "languages": [
+      {
+        "id": "uwsc",
+        "aliases": [
+          "UWSC",
+          "uwsc"
+        ],
+        "extensions": [
+          ".uws"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./ && npm run copy-files",
+    "copy-files": "cp -r src/data out/",
+    "watch": "tsc -watch -p ./"
+  },
+  "devDependencies": {
+    "@types/node": "^20.17.11",
+    "@types/vscode": "^1.85.0",
+    "typescript": "^5.0.0"
+  }
+}

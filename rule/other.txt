@@ -1,0 +1,23 @@
+＜スクランブル＞
+　//　可読できないようスクリプトにスクランブルをかける事ができます
+　コマンドプロンプトにて以下のように実行
+　UWSC　/A　xxxxx.uws　yyyyy.uws
+　　　　xxxxx.uws にスクランブルを掛けたものを yyyyy.uws として生成
+　UWSC　/A　xxxxx.uws
+　　　　xxxxx.uws は xxxxx.org にリネームされ xxxxx.uws が生成
+＜UWSC.INI＞
+　// 場所
+　// XPでは　C:\Documents and Settings\ユーザ名\Application Data\UWSC
+　// Vista以降では　C:\Users\ユーザ名\AppData\Roaming\UWSC
+　// 注： \Application Data\ / \AppData\ フォルダは非表示フォルダーです
+[SET] セクション
+　　LogLines = PRINT文でのロギングの最大行数を指定　（デフォルトは2000行）
+　　DefaultFont = フォント名, サイズ （MSGBOX, BALLOON等でのフォント、デフォルトは'Tahoma'）
+　　LogFont = フォント名, サイズ （PRINT文でのログ用フォント、デフォルトは'ＭＳ ゴシック'）
+　　StayOnTop = 1 　　UWSC本体のウィンドウを最前面に固定
+　　MainSize = 幅, 高さ （UWSC本体の幅, 高さを指定、デフォルトは 220,61）
+　　StopSize = 幅, 高さ （停止ボタンの幅, 高さを指定、デフォルトは 128,56）
+[LUNCHMENU] セクション
+　　Position = ｘ, y （ホットキーにてメニューを出す時の位置を指定、 -1,-1にてカーソル位置）
+[SCHEDULE] セクション
+　　MaxNumber =　スケジュールの最大設定数　（デフォルトは40、最大400まで）

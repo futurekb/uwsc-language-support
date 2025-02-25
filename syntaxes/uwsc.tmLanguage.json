@@ -1,0 +1,47 @@
+{
+  "scopeName": "source.uwsc",
+  "patterns": [
+    {
+      "include": "#keywords"
+    },
+    {
+      "include": "#comments"
+    },
+    {
+      "include": "#strings"
+    }
+  ],
+  "repository": {
+    "keywords": {
+      "patterns": [
+        {
+          "name": "keyword.control.uwsc",
+          "match": "\\b(IF|THEN|ELSE|ENDIF|FOR|TO|NEXT|WHILE|WEND|REPEAT|UNTIL|SELECT|CASE|DEFAULT|ENDSELECT|PROCEDURE|FUNCTION|ENDPROCEDURE|ENDFUNCTION|RETURN|EXIT|BREAK|CONTINUE|PRINT|CONST|DIM|PUBLIC|MODULE|ENDMODULE|CLASS|ENDCLASS|WITH|ENDWITH|TEXTBLOCK|ENDTEXTBLOCK|HASHTBL|TRY|FINALLY|ENDTRY|EXCEPT|OPTION|DEF_DLL|THREAD|CALL|LOGPRINT|STOPFORM|BALLOON|FUKIDASI|INPUT|MSGBOX|SLCTBOX|POPUPMENU|CREATEFORM|GETFORMDATA|SETFORMDATA|XLOPEN|XLCLOSE|XLACTIVATE|XLSHEET|XLGETDATA|XLSETDATA|RANDOM|ABS|ZCUT|INT|CEIL|ROUND|SQRT|POWER|EXP|LN|LOGN|SIN|COS|TAN|ARCSIN|ARCCOS|ARCTAN|G_MOUSE_X|G_MOUSE_Y|GET_WIN_DIR|GET_SYS_DIR|GET_CUR_DIR|GET_APPDATA_DIR|GET_UWSC_DIR|GET_UWSC_VER|GET_UWSC_PRO|GET_UWSC_NAME|G_SCREEN_W|G_SCREEN_H|G_SCREEN_C)\\b"
+        }
+      ]
+    },
+    "comments": {
+      "patterns": [
+        {
+          "name": "comment.line.double-slash.uwsc",
+          "match": "//.*$"
+        }
+      ]
+    },
+    "strings": {
+      "patterns": [
+        {
+          "name": "string.quoted.double.uwsc",
+          "begin": "\"",
+          "end": "\"",
+          "patterns": [
+            {
+              "name": "constant.character.escape.uwsc",
+              "match": "\\\\."
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,806 @@
+//　メモ帳起動
+If MsgBox("メモ帳を起動しますか？", BTN_YES or BTN_NO) = BTN_YES then Exec("notepad")
+
+//　メッセージ
+メモID = GETID("メモ帳")
+Ifb メモID < 0 then
+　　Fukidasi("メモ帳は起動されていません", 100, 100, 1, 16, "ＭＳ 明朝")
+　　Sleep(5)
+　　Fukidasi()　　　　　　　　　// 吹き出し消す
+Else
+　　SendStr(メモID, "メモ帳は起動されています")
+　　Sleep(5)
+　　CtrlWin(メモID, CLOSE)　　　　　　　　　// メモ終了
+　　ClkItem(GETID("メモ帳"), "いいえ")　　　// 保存はしない
+endif
+
+//　マウス水平移動、 別スクリプトファイルの呼出し
+// For　-　Next
+For x = 0 to 600
+　　MMV(x, 200)　　　　　　　//　マウスムーブ
+　　If (x mod 100) = 0 then Call .\TEST.uws　　// 100ドット毎にTEST.uws の実行
+　　Sleep(0.1)
+Next
+
+// While　-　Wend
+x = 0
+While x < 600
+　　MMV(x, 200)
+　　If (x mod 100) = 0 then Call .\TEST.uws
+　　x = x + 1
+　　Sleep(0.1)
+Wend
+
+// Repeat　-　Until
+x = 0
+Repeat
+　　MMV(x, 200)
+　　If (x mod 100) = 0 then Call .\TEST.uws
+　　x = x + 1
+　　Sleep(0.1)
+Until x > 600
+
+//　DOSコマンドによるファイルのコピー
+Sound("c:\winnt\media\canyon.mid")　　　　 //　バックミュージック
+MsgBox("バックアップをとります")
+DosCmd("Copy c:\*.uws c:\temp\*.bak")　　　// バックアップ
+Sound()　　　　　　　　　　　　　　　　　　// STOP
+Sound("beep")　　　　　　　　　　　　　　　// BEEP
+
+//　強制電源断
+POFF(P_POWEROFF or P_FORCE)
+
+//　ボタン選択
+SELECT SLCTBOX(SLCT_BTN, 10, "どれか選んでね", "AAAA", "BBBB", "CCCC")
+　CASE SLCT_1
+　　FUKIDASI("１番目が選ばれました")
+　CASE SLCT_2
+　　FUKIDASI("２番目が選ばれました")
+　CASE SLCT_3
+　　FUKIDASI("３番目が選ばれました")
+　CASE 0
+　　FUKIDASI("タイムアウトしました")
+SELEND
+Sleep(3)
+FUKIDASI()
+
+//　チェックボックス（複数選択の可能性あり）
+ans = SLCTBOX(SLCT_CHK, 0, "必要なものをチェックしてね", _　//　行結合
+　　　　"AAAA", "BBBB", "CCCC")
+wks = ""
+if (ans and SLCT_1) <> 0 then wks = wks + "１番目"
+if (ans and SLCT_2) <> 0 then wks = wks + "２番目"
+if (ans and SLCT_3) <> 0 then wks = wks + "３番目"
+FUKIDASI(wks + "が選ばれました")
+Sleep(3)
+FUKIDASI()
+
+//　CASE　の定義は文字でも数値でも変数でもＯＫ
+wkmoji = "BBB"
+SELECT INPUT("なんか入れて")
+　CASE "AAA"　　　　　　　//　文字
+　　FUKIDASI("AAA")
+　CASE wkmoji　　　　　　 //　変数
+　　FUKIDASI(wkmoji)
+　CASE 3　　　　　　　　　//　数値
+　　FUKIDASI("３")
+　DEFAULT
+　　FUKIDASI("訳わかんないです")
+SELEND
+Sleep(3)
+
+// ポップアップメニュ
+dim pp[7] = "aaa", "bbb", "ccc", "{111", "222", "333}", "ddd"　// 111, 222, 333 は cccのサブメニュ
+x = POPUPMENU(pp)
+ifb x >= 0
+　print pp[x] + "が選ばれた"
+else
+　print "キャンセルされた"
+endif
+
+//　入力された数を階乗計算する
+While True
+　数 = input("1～10の間の数を入力してください")
+　ifb VAL(数) = ERR_VALUE
+　　　MsgBox("数値を入れてください")
+　　　Continue
+　endif
+　ifb (数<1) or (数>10)
+　　　MsgBox("指定範囲内の数を入れてください")
+　　　Continue
+　endif
+　break
+wend
+print 数 + "の階乗の答えは" + Format(階乗計算(数), 10) + "です"　　// １０桁分の幅を取り表示
+
+//　関数定義
+function 階乗計算(値)
+　　ifb 値 = 0 then
+　　　　Result = 1
+　　　　Exit
+　　endif
+　　Result =値 *階乗計算(値-1)　　//　このように再帰計算もできるよ
+fend
+
+//　DLLの使用
+DEF_DLL SetWindowTextA(HWND,string):user32.DLL
+DEF_DLL EnableWindow(HWND,Bool):Bool:user32.DLL
+DEF_DLL EnableMenuItem(HWND,UINT,UINT):DWORD:user32.DLL
+DEF_DLL GetSubMenu(HWND,int):HWND:user32.DLL
+DEF_DLL ModifyMenuA(HWND,Long,Long,Long,Long):Long:user32.DLL
+DEF_DLL GetCursorPos({long,long}):bool:user32　　　　　　//　構造体使用
+DEF_DLL ClipCursor({long,long,long,long}):bool:user32　　//　構造体使用
+MF_BYPOSITION =$400
+MF_GRAYED =$1
+SC_CLOSE =$F060
+
+//　メモ帳を弄る　　終了はALT+F4 で
+id =exec("notepad")
+hwnd = GetSubMenu(GetCtlHnd(id,GET_MENU_HND),0)　　　//　メニュ->ファイル
+EnableMenuItem(hwnd,8,MF_BYPOSITION+MF_GRAYED)　 　　//　終了をグレー
+hwnd =GetCtlHnd(id,GET_SYSMENU_HND)　　　　　　　　　//　システムメニュ
+ModifyMenuA(hwnd,SC_CLOSE,MF_GRAYED,0,0)　　　　　　 //　クローズボタンをグレー
+ClkItem(id,"バージョン情報")
+hwnd =GetCtlHnd(GETID("バージョン情報"),"OK")
+SetWindowTextA(hwnd,"押せまい")　　　　　　　　　　　//　OKボタン書換え
+EnableWindow(hwnd,False)
+
+//　構造体を使用したものは展開して設定
+dim x,y
+GetCursorPos(x,y)
+print "マウス位置="+x +","+y
+ClipCursor(x-100,y-100,x+100,y+100)　　//　+-100以内にマウス移動を限定
+Sleep(10)
+
+//　Post/Message は以下のように
+DEF_DLL PostMessageA(HWND,LONG,LONG,DWORD):Bool:user32.DLL
+DEF_DLL SendMessageA(HWND,LONG,LONG,DWORD):LONG:user32.DLL
+//var宣言を付けると参照引数（ポインター渡し)
+//DEF_DLL teststr(var string,var int,var double):string:TEST.DLL
+//　メモ帳の操作
+メモ帳id =GETID("メモ帳")
+ifb メモ帳id <0 then
+　　MsgBox("メモ帳が起動してません")
+　　Exit
+endif
+
+//　置換の実行
+SendStr(メモ帳id, "リターンの実行<#CR>", 1, True)　//　リターン　=<#CR>
+SendStr(メモ帳id, "タブの実行<#TAB>")　　　　　　  //　タブ　=<#TAB>
+SendStr(メモ帳id, "あああ")
+ClkItem(メモ帳id, "置換", CLK_MENU)
+置換id =GETID("置換")
+SendStr(置換id, "あああ", 1, True)　　　　　//　検索
+SendStr(置換id, "いいい", 2, True)　　　　　//　置換
+ClkItem(置換id, "すべて置換")
+ClkItem(置換id, "キャンセル")
+
+//　全部のウィンドウ情報を表示する　又アイコン状態のものは元に戻す
+数 = GETALLWIN()　　//　全ＩＤゲット
+Print 数
+For i = 0 to 数-1
+　　print STATUS(ALL_WIN_ID[i], ST_TITLE)　　　//　タイトル表示
+　　//　状態表示
+　　print "X=" + STATUS(ALL_WIN_ID[i], ST_X) + ",Y=" + STATUS(ALL_WIN_ID[i], ST_Y)
+　　print "幅=" + STATUS(ALL_WIN_ID[i], ST_WIDTH) + ",高=" + STATUS(ALL_WIN_ID[i], ST_HEIGHT)
+　　print "IsICON=" + STATUS(ALL_WIN_ID[i], ST_ICON)
+　　print ",IsVISIBLE=" + STATUS(ALL_WIN_ID[i], ST_VISIBLE)
+　　print ",IsACTIVE=" + STATUS(ALL_WIN_ID[i], ST_ACTIVE)
+　　//　アイコン状態のものは元に戻す
+　　If STATUS(ALL_WIN_ID[i], ST_ICON) then CtrlWin(ALL_WIN_ID[i], NORMAL)
+Next
+
+//　リストボックスに在る物を全て表示する
+id = GetID("Form1")
+for i = 0 to GetItem(id, ITM_LIST, 1)-1
+　　print ALL_ITEM_LIST[i]
+next
+
+//　画面解像度を変更する（Windows XP）
+Exec("Control Desk.cpl")　　　　　　　　　//　画面プロパティ起動
+id = getid("画面のプロパティ", "#32770")
+ClkItem(id, "設定", CLK_TAB)
+kz = GETSLIDER(id)　　　　　　　　　　　　//　0：640,　1：800､　2：1024　　
+if kz > 0 then SETSLIDER(id, kz-1)　　　　//　解像度を一段下げる　　
+ClkItem(id, "True Color (32 ビット)", CLK_LIST)
+ClkItem(id, "ＯＫ", CLK_BTN)
+ClkItem(GETID("画面"), "ＯＫ", CLK_BTN)
+ClkItem(GETID("モニタの設定"), "はい", CLK_BTN)
+
+//　電卓を開き　バージョン確認
+calcID = Exec("calc.exe")
+Sleep(1)
+SCKEY(id, VK_ALT, H, A)　　　　　　//　ヘルプ　->　バージョン情報
+s = ""
+for n = 1 to 6
+　　s = s + GetStr(GETID("バージョン情報"), n, STR_STATIC) + "<#CR>"
+next
+SendStr(0, s)　　　　　　　　　　　//　クリップボードへ
+
+//　クリップボード貼付け
+メモID = EXEC("notepad", 0, 100, 10, 400, 400)
+Sleep(1)
+SCKEY(メモID, VK_CTRL, V)
+
+//　文字置換
+wks = GETSTR(メモID)
+wks = REPLACE(wks, "abc", "xyz")　　//　abc ->xyzに置換
+Print wks
+
+//　カーソル位置の色を表示
+x = G_MOUSE_X; y = G_MOUSE_Y
+c = PeekColor(x, y)
+PRINT "赤="+G_赤(c)+",緑="+G_緑(c)+",青="+G_青(c)
+
+//　タスクトレイのアイコンを左クリック
+Ifb CHKIMG("タスクトレイアイコン.BMP")
+　　BTN(LEFT, CLICK, G_IMG_X+5, G_IMG_Y+5)
+Endif
+
+//　ウィンドウ "あいう"の画像を保存
+SaveImg("あいう.BMP", GETID("あいう"))
+
+//　以下　関数
+function G_赤(c)
+　　Result = c and $FF
+fend
+function G_緑(c)
+　　Result = (c and $FF00) / $100
+fend
+function G_青(c)
+　　Result = (c and $FF0000) / $10000
+fend
+
+//　CSVファイルの値を２倍して書き戻す
+fid = FOPEN("TEST.CSV", F_READ or F_WRITE)　　　　//　ファイルオープン
+For 行 = 1 to FGET(fid, -1)　　　　　　　　　　　 //　行数分
+　　For 列 = 1 to 3　　　　　　　　　　　　　　　 //　３列
+　　　　atai = FGET(fid, 行, 列)　　　　　　　　　//　GET
+　　　　if ChkNum(atai) then atai = atai * 2　　　//　数字であれば２倍
+　　　　FPUT(fid, atai, 行, 列)　　　　　　　　　 //　PUT
+　　next
+next
+FCLOSE(fid)　　　　　　　　　　　　　　　　　　　　//　ファイルクローズ
+
+//　昨日の日報(yymmdd.dat),　月報(yymm.dat)名を生成
+GetTime(-1)　　　　　　　　　　　　　　　　　　　　//　昨日の日付を取得
+日報ファイル = G_TIME_YY2 +G_TIME_MM2 +G_TIME_DD2 +".DAT"
+月報ファイル = G_TIME_YY2 +G_TIME_MM2 +".DAT"
+
+//　2005年4月1日から60日目を算出
+GetTime(60, "2005/04/01")　　　　　　　　　　　　　//　2005年4月1日を基準に+60日
+指定日 = G_TIME_YY2 +G_TIME_MM2 +G_TIME_DD2 +".DAT"
+
+// 現在時間から6時間後
+GetTime(6/24)　　　　　　　　　　　　　　　　　　　//　小数点以下は時間計算
+
+//　2005年4月1日12時30分から+1日と12時間を算出
+GetTime(1.5, "2005/04/01 12:30:00")
+
+// GETKEYSTATEによる Aキー、SHIFTキー、マウスクリックをチェック
+while True
+　　wks = ""
+　　if GETKEYSTATE(VK_A) then wks = wks + ",Ａ"
+　　if GETKEYSTATE(VK_SHIFT) then wks = wks + ",SHIFT"
+　　if GETKEYSTATE(VK_RBUTTON) then wks = wks + ",右クリック"
+　　if GETKEYSTATE(VK_LBUTTON) then wks = wks + ",左クリック"
+　　Fukidasi(Copy(wks,2,99))
+　　if wks <> "" then sleep(0.3)
+　　sleep(0.2)
+wend
+
+// SETHOTKEYによる キーチェック
+for k = VK_A to VK_F
+　　SETHOTKEY(k, ,"fuckey")　　　　 // AからFまでキー登録
+next
+SETHOTKEY( ,MOD_CONTROL, "fucx")　　// CTRLキー の登録
+SETHOTKEY(VK_A, MOD_SHIFT, "fucx")　// Shift + A の登録
+Sleep(100)
+for k = VK_A to VK_F
+　　SETHOTKEY(k)　　　　　　　　　　// 解除
+next
+
+// End
+Procedure fuckey()
+　　print CHR(HOTKEY_VK) + "が押された"
+Fend
+Procedure fucx()
+　　if HOTKEY_MOD=MOD_CONTROL then print "CTRLが押された"
+　　if (HOTKEY_VK=VK_A) and (HOTKEY_MOD=MOD_SHIFT) then print "Shift + Aが押された"
+Fend
+
+//　OPTION指定
+Option SAMESTR, OPTPUBLIC　　　　 // 大小文字を区別、ファイル間PUBLIC変数の重複禁止
+Option LOGPATH= C:\TEMP\TEST.LOG　// ログ出力を変更
+
+//　パラメータ引数（PARAM_STR）の表示
+print Length(PARAM_STR)+"個のパラメータ引数があります"
+for i=0 to Length(PARAM_STR)-1
+　　print PARAM_STR[i]
+next
+
+//　ファイル名表示
+for i=0 to GETDIR("C:\temp")-1
+　　print GETDIR_FILES[i]
+next
+
+//　*.datファイル名のみ表示
+for i=0 to GETDIR("C:\temp","*.dat")-1
+　　print GETDIR_FILES[i]
+next
+
+//　D:ドライブのディレクトリ木表示
+ディレクトリ("D:", 0)
+procedure ディレクトリ(dd, lve)
+　　lve = lve + 1
+　　for i=0 to GETDIR(dd,"\")-1
+　　　　sps = ""
+　　　　for s=2 to lve;　　sps = sps + "　";　　next　　　
+　　　　print sps + GETDIR_FILES[i]
+　　　　ディレクトリ(dd+"\"+GETDIR_FILES[i], lve)
+　　next
+fend
+
+// ペイントに C:\Temp\abc.bmp をドロップする
+DROPFILE(GETID("ペイント"), "C:\Temp", "abc.bmp")
+
+//　Excelの操作
+Excel = CreateOLEObj("Excel.Application")
+Excel.Visible = True
+Workbook = Excel.WorkBooks.Add
+for y = 1 to 5
+　　for x = 1 to 5
+　　　　Excel.ActiveSheet.Cells[y,x].Value = y*10 + x
+　　next
+next
+PLeneSet = WorkBook.WorkSheets[1].Range["A5:E5"].Borders[4]
+PLeneSet.Weight = 3
+PLeneSet.ColorIndex = 3
+Excel.WorkBooks.Open(FileName :="e:\test.csv", readOnly :=False)
+
+//　IE の表示、その中のリンクアドレスを全て抽出する
+IE = CreateOLEObj("InternetExplorer.Application")
+IE.Visible = True
+IE.Navigate("http://www.yahoo.co.jp/")　　　// 指定URL
+COM_ERR_IGN　　　　　　　　　　　　　　　　 // COMエラー無視
+while True　　　　　　　　　　　　　　　　　// 接続表示待ち
+　　if (! IE.busy) and (IE.readyState=4) then Break
+　　sleep(0.1)
+wend
+COM_ERR_RET　　　　　　　　　　　　　　　　// エラー処理復帰
+for i = 0 to IE.document.links.length-1　　// リンクアドレスを表示
+　　print IE.document.links[i].href
+next
+
+//　c:\windows下のディレクトリ表示
+fs = CreateOLEObj("Scripting.FileSystemObject")
+gf = fs.GetFolder("c:\windows")
+for i = 0 to GETOLEITEM(gf.SubFolders)-1　// コレクション取得
+　　print ALL_OLE_ITEM[i].name
+next 
+
+//　マウス位置の文字取得
+While True
+　　x = G_MOUSE_X; y = G_MOUSE_Y　　　　　// マウス位置
+　　id = GETID(GET_FROMPOINT_WIN)　　　　 // アクティブウィンドウ
+　　ofx = x - STATUS(id, ST_CLX)　　　　　// 相対位置
+　　ofy = y - STATUS(id, ST_CLY)
+　　wks = PosACC(id, ofx, ofy, ACC_BACK)
+　　wks = wks + "<#cr>" + "x="+ofx+", y="+ofy
+　　Fukidasi(wks, x+10, y+10, 3)
+　　Sleep(1)
+Wend
+
+// 音声認識：　"コンピュータ"、"電卓"、"メモ帳"、"切換え", "終り"　 の５つの単語を使用
+dim cmd[3] = "コンピュータ", "電卓", "めもちょう"
+RECOSTATE(True, cmd, "きりかえ", "おわり")　　// 開始、単語登録
+While True
+　ss = DICTATE(True)　　　　　　// 取得
+　print ss
+　select ss
+　　case "コンピュータ"
+　　　　sound("BEEP")
+　　case "電卓"
+　　　　exec("calc.exe")
+　　case "めもちょう"
+　　　　exec("notepad.exe")
+　　case "きりかえ"　　　　　　　　　　　// アクティブウィンドウの切換え
+　　　　SCKEY(0, VK_SHIFT, VK_ALT, VK_TAB)
+　　　　ss = ss + " " + STATUS(GETID(GET_ACTIVE_WIN), ST_TITLE)
+　　case "おわり"
+　　　　SPEAK("ByeBye");　break　　　　　// 音声合成
+　selend
+Wend
+RECOSTATE(False)
+
+// スレッドとメインにてカウント
+Thread カウント()　　　　　　　　　　　// スレッドは噴出しにてカウント
+print "メイン"
+cnt = "1, 2, 3, 4, 5, 6, 7, 8, 9, 10"
+for i = 1 to 10
+　　print Token(", ", cnt, True)　　　 // メインはPRINTにてカウント
+　　Sleep(1)
+next
+procedure カウント()
+　　for i = 1 to 10
+　　　　Fukidasi("スレッド " + i)
+　　　　Sleep(1)
+　　next
+fend
+
+// 計算関数のモジュール化
+計算.足し算(10)　　　　　　　// 0+10
+計算.引き算(5)　　　　　　　 // 10-5
+計算.掛け算(10)　　　　　　　// 5*10
+計算.割り算(2)　　　　　　　 // 50/2
+Print "答え=" + 計算.結果　　// 25
+MODULE 計算
+　　Public 結果 = 0
+　　Procedure 足し算(x)
+　　　　結果 = 結果 + x
+　　Fend
+　　Procedure 引き算(x)
+　　　　結果 = 結果 - x
+　　Fend
+　　Procedure 掛け算(x)
+　　　　結果 = 結果 * x
+　　Fend
+　　Procedure 割り算(x)
+　　　　結果 = 結果 / x
+　　Fend
+EndModule
+
+// フォーム画面
+// TEST.html として以下があるとする
+　<html><body style="overflow:hidden;"><form method="POST">
+　<font color="#FF0000">abcdefg</font></p>
+　<input type="text" name="Text1" size="68"><p>
+　<input type="checkbox" name="Check1" value="ON">aaaa
+　<input type="checkbox" name="Check2" value="ON">bbbb<p>
+　<input type="radio" checked name="Radio1" value="V1">1111
+　<input type="radio" name="Radio1" value="V2">2222<p>
+　<select size="1" name="Select1">
+　　<option>xxxxx</option> <option>yyyyy</option>
+　</select></p>
+　<input type="submit" value=" OK " name="OKBtn">
+　<input type="submit" value="キャンセル" name="CancelBtn">
+　</form></body></html>
+
+// OKBtn ボタンが押されたら各入力値を表示する
+ifb CREATEFORM("TEST.html", "タイトル１", False, 0, 500, 320) = "OKBtn"
+　　print GETFORMDATA("Text1")
+　　print "aaaa="+GETFORMDATA("Check1")
+　　print "bbbb="+GETFORMDATA("Check2")
+　　print "1111="+GETFORMDATA("Radio1", "V1")
+　　print "2222="+GETFORMDATA("Radio1", "V2")
+　　print GETFORMDATA("Select1")
+else
+　　print "キャンセル"
+endif
+print
+
+// 返されるCOMオブジェクトにて値を変更、画面が閉じるまで待つ
+obj = CREATEFORM("TEST.html", "タイトル２", True, 0, 500, 320)
+SETFORMDATA(True, "Check2")　　　　// Check2 を Onに変更
+SETFORMDATA("yyyyy", "Select1")　　// Select1 を "yyyyy"に変更
+SETFORMDATA("カキカキ", "Text1")　 // Text1 を "カキカキ"に変更
+while obj.Visible　　　　　　　　　// ボタンが押されて画面が閉じるまで待つ
+　　Sleep(0.2)
+wend
+print GETFORMDATA("Text1")
+print "aaaa="+GETFORMDATA("Check1")
+print "bbbb="+GETFORMDATA("Check2")
+print "1111="+GETFORMDATA("Radio1", "V1")
+print "2222="+GETFORMDATA("Radio1", "V2")
+print GETFORMDATA("Select1")
+if GETFORMDATA("OKBtn") then print "OK"　　// ボタンには 一度だけTrue(1)が設定される
+if GETFORMDATA("CancelBtn") then print "Cancel"
+print
+
+// 20秒間まってから画面を閉じる
+obj = CREATEFORM("TEST.html", "タイトル３", True, FOM_NOICON or FOM_NOHIDE, 500, 320)
+s = IEGETSRC(obj, "Font", 1)
+s = Replace(s, "abcdefg", "20秒まってね！")
+IESETSRC(obj, s, "Font", 1)　　　　　// 文字の変更
+sleep(20)
+print GETFORMDATA("Text1")
+print "aaaa="+GETFORMDATA("Check1")
+print "bbbb="+GETFORMDATA("Check2")
+print "1111="+GETFORMDATA("Radio1", "V1")
+print "2222="+GETFORMDATA("Radio1", "V2")
+print GETFORMDATA("Select1")
+if GETFORMDATA("OKBtn") then print "OK"　　// ボタンには 一度だけTrue(1)が設定される
+if GETFORMDATA("CancelBtn") then print "Cancel"
+obj.Quit　　　　　　　　　// 画面を閉じる
+
+// 計算画面
+obj = CREATEFORM("about:blank", "Calc", True, FOM_NOHIDE)　　// フォーム生成
+obj.Document.write(計算フォーム)　　　　　　 // HTMLを書き込む
+while obj.Visible　　　　　　　　　　　　　　// 画面が出ている間
+　　ifb GETFORMDATA("CalBtn")　　　　　　　　// 計算ボタンが押された
+　　　　a = VAL(GETFORMDATA("Text1"))
+　　　　b = VAL(GETFORMDATA("Text2"))
+　　　　ifb (val(a)=ERR_VALUE) or (val(b)=ERR_VALUE)
+　　　　　　MsgBox("数値を入れてください");　Continue
+　　　　endif
+　　　　anser = obj.Document.body.all.tags("font").item[0]
+　　　　select GETFORMDATA("Select1")
+　　　　　　case "足し算"; anser.innerText = a + b
+　　　　　　case "引き算"; anser.innerText = a - b
+　　　　selend
+　　endif
+　　Sleep(0.1)
+wend
+TextBlock 計算フォーム　　　　　　　　　　　// 計算フォーム.html
+　<form method='POST'>
+　　<input type='text' name='Text1' size='8'>
+　　<select name='Select1'><option>足し算</option><option>引き算</option></select>
+　　<input type='text' name='Text2' size='8'>
+　　<input type='submit' value=' 計算 ' name='CalBtn'><BR>
+　　<font color='#FF0000'>答え</font>
+　</form>
+EndTextBlock
+
+// Google操作　検索結果のタイトルとURLを表示
+IE = CreateOLEObj("InternetExplorer.Application")
+IE.Visible = True
+IE.Navigate("http://www.google.co.jp/")
+BusyWait(IE)
+IESetData(IE,"検索単語","q")　　　　　　　　 // 文字設定：検索単語
+IESetData(IE,True,"btnG","Google 検索")　　　// SUBMIT
+BusyWait(IE)
+Sleep(1)　　　　　　　　　　　　　　　　　　// JavaScriptの完了待ち
+body = IEGetSrc(IE, "BODY")　　　　　　　　　　　　　// BODYのソース取得
+body = Copy(body, Pos("<h3 ",body), 999999)　　　　　　 // h3タグ以下を取得
+body = Copy(body, 1, Pos("background-position", body))　// 不必要部分の削除
+cnt = 1
+while True
+　wks= BetweenStr(body,"<h3 ","</h3>", cnt)
+　if wks = EMPTY then break
+　wks = REPLACE(wks,"<em>", "")　　　　// 邪魔なタグは潰す
+　wks = REPLACE(wks,"</em>", "")
+　wks = REPLACE(wks,"</a>", "")
+　print cnt
+　print Copy(wks, Pos("<#DBL>",wks,-1)+2, 999)　　 // タイトル
+　print BetweenStr(wks, "href=<#DBL>","<#DBL>")　　// URL
+　cnt = cnt + 1
+wend
+
+//------
+Procedure BusyWait(ie)
+　repeat
+　　Sleep(0.2)
+　until (! ie.busy) and (ie.readyState=4)
+Fend
+
+// テーブルからのデータ取得
+// IEGetData(IE, "TAG=TABLE", 2, 3, 4)　　// ２つ目のTABLEの３行目４列
+// IEGetData(IE, "TAG=A", 5)　　　　　　　// ５つ目のAタグの表示項目
+// 指定文字列間の表示
+moji = "A12, B12, C12, A34, B34, C34, A56, B56, C56, A78, B78, C78"
+// AとCの間
+print BetweenStr(moji, "A", "C")　　　　　　 // 12, B12, 
+print BetweenStr(moji, "A", "C", 2)　　　　　// 34, B34, 
+// 前文字と後文字が同じ時
+print BetweenStr(moji, "A", "A", 1)　　　　　// 12, B12, C12, 
+print BetweenStr(moji, "A", "A", 2)　　　　　// 56, B56, C56, (後文字以降で取得)
+print BetweenStr(moji, "A", "A", 2, True)　　// 34, B34, C34, (前文字以降で取得)
+// 連想配列の操作
+PUBLIC HASHTBL B　　　　　// パブリック、大・小文字区別しない、キーは書込み順
+HASHTBL A = HASH_CASECARE or HASH_SORT　// 大・小文字区別、キーはソート
+A["あ"] = 1
+A["う"] = 3
+A["お"] = 5
+A["え"] = 4
+A["い"] = 2
+A["お"] = 9
+// "う"の値は何？
+print "'う' の値は " + A["う"]
+// "え"があれば削除
+ifb A["え", HASH_EXISTS]
+　　flg = A["え", HASH_REMOVE]　　　　// 必要無くとも変数で受ける
+endif
+
+// ソート順で表示 (文字型での昇順ソート)
+for n = 0 to Length(A)-1
+　　print A[n, HASH_KEY] + " = " + A[n, HASH_VAL]
+next
+// 関数に渡す (一次元配列の渡し方と同じ)
+testproc(A)
+Procedure testproc( X[] )
+　print X["あ"]
+Fend
+
+// Excelのイベント処理
+// クローズ処理の禁止、変更されたセル内容の表示
+excel = CreateOleObj("Excel.Application")
+Excel.Workbooks.Add
+excel.visible = true
+
+// Application Events: WorkbookBeforeClose （Close前）
+OleEvent(excel, "AppEvents", "WorkbookBeforeClose", "BeforeClose")
+
+// Sheet Events: Change（Cell内容変更）
+OleEvent(excel.ActiveSheet, "DocEvents", "Change", "Change")
+Sleep(1000)
+
+// Book: BeforeClose
+Procedure BeforeClose()
+　print "Closeは禁止"
+　EVENT_PRM[1] = True　　　　// 第２引数をTrueに変更:Closeしない
+Fend
+
+// Cell: Change
+Procedure Change()
+　rng = EVENT_PRM[0]
+　print rng.Value
+Fend
+
+// 例外処理
+// エラーあり exceptで処理: 1, 3, 4
+try
+　　print "1"
+　　a = "X";　a = 1 / a　　　// エラー
+　　print "2"
+except
+　　print "3"
+endtry
+　　print "4"
+
+// 正常処理: 11, 33, 44
+try
+　　try
+　　　　print "11"
+　　except
+　　　　print "22"
+　　endtry
+finally
+　　print "33"
+endtry
+　　print "44"
+
+// Exitあり finallyで処理: 111, 333
+関数1()
+procedure 関数1()
+　try
+　　　print "111"
+　　　Exit
+　　　print "222"
+　finally
+　　　print "333"
+　endtry
+　　　print "444"　　// Exit時:実行されない
+fend
+
+// Excel操作
+// 指定Excelファイルを読み、Sheet2のB2セルの値を変更して書き戻して終了
+Excel = XLOPEN("C:\TEMP\TEST.xls")
+XLACTIVATE(Excel, "Sheet2")
+dd = XLGETDATA(Excel, "A1:C3")
+print "A1="+dd[1,1]
+print "B2="+dd[2,2]
+print "C3="+dd[3,3]
+dd[2,2] = "変更"
+XLSETDATA(Excel, dd, "A1")
+XLCLOSE(Excel)
+
+// 新規にExcelを起動してUWSCの配列を設定、保存せずに終了
+Excel = XLOPEN(, True)
+DIM dat[3, 3]
+dat[1,1]="11"; dat[1,2]="12"; dat[1,3]="13"
+dat[2,1]="21"; dat[2,2]="22"; dat[2,3]="23"
+dat[3,1]="31"; dat[3,2]="32"; dat[3,3]="33"
+XLSETDATA(Excel, dat, "B2")
+MSGBOX("保存せずに終了します")
+XLCLOSE(Excel, True)
+
+// INIファイル処理
+// 'スクリプト名'.INI  に対し読み書き
+WriteIni("Number", "No1", 111)
+WriteIni("Number", "No2", 222)
+WriteIni("Number", "No3", 333)
+print "No2 = " + ReadIni("Number", "No2")　　// print No2
+DeleteIni("Number", "No1")　　　　　　　　　 // 削除 No1
+
+// UWSC.INI ファイルから Position情報を読み込む　
+print "Position = " + ReadIni("SET", "Position", GET_APPDATA_DIR+"\UWSC\UWSC.INI")
+
+// EVALにて文字式を解く
+a = 2
+b = 4
+c = 0
+EVAL("c := 3")　　//  :=　代入
+print EVAL("int(a * b + c - subr() / 2)")　　// int(2 * 4 + 3 - 9.9 / 2)　=　6
+function subr()
+　　Result = 9.9
+fend
+
+// PowerShellの実行
+// C:\のファイル表示（ファイルサイズ順で）
+print PowerShell("Get-ChildItem C:\ | Sort-Object Length")
+
+// $dat配列(1～10)の値を足しながら表示
+print PowerShell(prg)
+TextBlock prg
+$dat = 1,2,3,4,5,6,7,8,9,10
+$val = 0
+foreach ($v in $dat)
+{
+$val= $val + $v
+Write-Output $val
+}
+EndTextBlock
+
+// 文字列から数値のみ配列にいれ合計値を計算
+str = "abc 123 def 1,456 ghi 78.9"
+dat = SPLIT(str, " ", True, True)　　　　　 // 数値のみ有効
+print JOIN(dat, " + ")　　　　　　　　　　　// 123 + 1456 + 78.9
+print "合計= "+ CALCARRAY(dat, CALC_ADD)　　// 合計= 1657.9
+
+// ソート
+dim dat[1][4]
+dim dat2[4]
+dat[0][0]=5; dat[1][0]="A"; dat2[0]="V"
+dat[0][1]=3; dat[1][1]="B"; dat2[1]="W"
+dat[0][2]=9; dat[1][2]="C"; dat2[2]="X"
+dat[0][3]=2; dat[1][3]="D"; dat2[3]="Y"
+dat[0][4]=6; dat[1][4]="E"; dat2[4]="Z"
+QSort(dat[0], 0, dat[1], dat2)　　// 昇順、多次元配列は一次元単位にして設定
+for i = 0 to 4
+　　print dat[0][i] +","+ dat[1][i] +","+ dat2[i]
+next
+
+// 結果
+// 2,D,Y
+// 3,B,W
+// 5,A,V
+// 6,E,Z
+// 9,C,X
+// メモ帳に a b c を直接送る（バックグラウンド状態でも動作）
+id =exec("notepad")
+MOUSEORG(GETCTLHND(id,"Edit"), 2)　// メモ帳のEdit部を指定
+CTRLWIN(id, MIN)　　　　　　　　　// 最少化状態での書き込み
+KBD(VK_A)
+KBD(VK_B)
+KBD(VK_C)
+
+// メモ帳の選択状態のフォント情報を取得
+ClkItem(id, "フォント", CLK_MENU)
+id = GETID("フォント")
+for n = 1 to 4
+　　print GETSLCTLST(id, n)
+next
+sleep(2)
+ClkItem(id, "キャンセル", CLK_BTN)
+
+// 配列値の表示
+dim dat[2][2] = 1,2,3, 4,5,6, 7,8,9
+for s in dat
+　　print s　　　　　　　　　// 1,2,3,4,5,6,7,8,9
+next
+print
+for s in dat[1]
+　　print s　　　　　　　　　// 4,5,6
+next
+print
+
+// 正規表現でマッチした値の表示
+regexp = CreateOleObj("VBScript.RegExp")
+regexp.Pattern = "[a-zA-Z]+"
+regexp.Global = True
+matches = regexp.Execute("A B C")
+for s in matches
+　　print s.Value　　　　　　　// A,B,C
+next
+print
+
+// 文字列を一文字づつ表示
+for s in "1234"
+　　print s　　　　　　　　　// 1,2,3,4
+next
+print
+
+// C:\Tempフォルダーのファイル名表示
+for s in GETDIR("C:\Temp")
+　　print s
+next 

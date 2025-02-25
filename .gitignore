@@ -1,0 +1,24 @@
+# Node.js の依存パッケージ
+node_modules/
+
+# コンパイル出力
+out/
+dist/
+
+# VSCode の設定
+.vscode/
+
+# OS によるファイル
+.DS_Store
+Thumbs.db
+
+# 一時ファイル
+*.tmp
+*.log
+
+/tmp/
+
+# Used by dotenv library to load environment variables.
+# .env
+
+.vscode-test/
