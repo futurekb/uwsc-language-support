@@ -1,0 +1,1791 @@
+[
+    {
+        "label": "PEEKCOLOR",
+        "detail": "指定位置の色を取得",
+        "documentation": "指定位置の色を取得します。",
+        "arguments": [
+            { "name": "X", "description": "座標 X" },
+            { "name": "Y", "description": "座標 Y" },
+            { "name": "RGB指定", "description": "0: BGR値 (デフォルト), COL_RGB: RGB値, COL_R: 赤成分, COL_G: 緑成分, COL_B: 青成分", "optional": true },
+            { "name": "クリップボード指定", "description": "画面またはクリップボードから色を取得します。FALSE: 画面 (デフォルト), TRUE: クリップボード", "optional": true }
+        ],
+        "returns": "指定位置の色情報",
+        "example": "// カーソル位置の色を表示\nx = G_MOUSE_X; y = G_MOUSE_Y\nc = PeekColor(x, y)\nPRINT \"赤=\"+G_赤(c)+\",緑=\"+G_緑(c)+\",青=\"+G_青(c)",
+        "insertText": "PEEKCOLOR(${1:X}, ${2:Y}, ${3:RGB指定}, ${4:クリップボード指定})"
+    },
+    {
+        "label": "CHKIMG",
+        "detail": "指定画像が画面上にあるかチェック、あればその情報を返す",
+        "documentation": "指定画像が画面上にあるかチェックし、あればその情報を返します。",
+        "arguments": [
+            { "name": "ファイル名", "description": "画像ファイル名（bmpのみ）(画像名を省略した場合はクリップボードから)" },
+            { "name": "透過色/色無視", "description": "0： 指定なし （デフォルト）\n1： 左上、2:右上、3:左下、4:右下　の１ピクセルの色を透過色として処理\n-1： 色を無視して形でチェックする\nx1, y1, x2, y2： サーチ範囲", "optional": true },
+            { "name": "X1", "description": "サーチ範囲", "optional": true },
+            { "name": "Y1", "description": "サーチ範囲", "optional": true },
+            { "name": "X2", "description": "サーチ範囲", "optional": true },
+            { "name": "Y2", "description": "サーチ範囲", "optional": true },
+            { "name": "番号", "description": "複数ある場合に順番を指定 （左上から）-1：-1が指定された場合はヒットした数を戻値として返し、座標情報は ALL_IMG_X[], ALL_IMG_Y[] に格納\n（G_IMG_X、 G_IMG_Y には最後にヒットした位置が入る）", "optional": true },
+            { "name": "色幅", "description": "チェックに色幅を持たせる", "optional": true }
+        ],
+        "returns": "有ればTRUE、無ければFALSE\nTRUE の場合は見つかった座標を特殊変数　G_IMG_X、 G_IMG_Y に格納\n番号にて -1指定時はヒットした数を返し、座標情報は配列変数 ALL_IMG_X[], ALL_IMG_Y[] に格納（配列はゼロから）",
+        "example": "// タスクトレイのアイコンを左クリック\nIfb CHKIMG(\"タスクトレイアイコン.bmp\")\n    BTN(LEFT, CLICK, G_IMG_X+5, G_IMG_Y+5)\nEndif",
+        "insertText": "CHKIMG(\"${1:ファイル名}\", ${2:透過色/色無視}, ${3:X1}, ${4:Y1}, ${5:X2}, ${6:Y2}, ${7:番号}, ${8:色幅})"
+    },
+    {
+        "label": "VAL",
+        "detail": "文字列を数値に変換",
+        "documentation": "文字列を数値に変換します。",
+        "arguments": [
+            { "name": "文字列", "description": "数値に変換する文字列" },
+            { "name": "エラー値", "description": "数値に変換できない場合に返す値", "optional": true }
+        ],
+        "returns": "数値。数値変換できない場合はエラー値を返す",
+        "example": "a = VAL(\"123\")\nPRINT a",
+        "insertText": "VAL(\"${1:文字列}\", ${2:エラー値})"
+    },
+
+    {
+        "label": "IFB",
+        "detail": "IF",
+        "documentation": "IFブロック文",
+        "arguments": [],
+        "returns": "なし",
+        "example": "IFB\n    PRINT \"TRUE\"\nELSE\n    PRINT \"FALSE\"\nENDIF",
+        "insertText": "IF　${1:式}　THEN\n${2:真}\n　ELSE\n${3:偽}\n　ENDIF"
+    },
+    {
+        "label": "GETALLWIN",
+        "detail": "全てのウィンドウを取得する",
+        "documentation": "全てのウィンドウの情報を取得します。",
+        "arguments": [],
+        "returns": "ウィンドウの情報の配列",
+        "example": "windows = GETALLWIN()\nPRINT windows",
+        "insertText": "GETALLWIN()"
+    },
+    {
+        "label": "REPLACE",
+        "detail": "文字列を置換",
+        "documentation": "文字列を置換します。",
+        "arguments": [
+            { "name": "文字列", "description": "置換対象の文字列" },
+            { "name": "置換前の文字", "description": "置換する文字" },
+            { "name": "置換後の文字", "description": "置換後の文字" }
+        ],
+        "returns": "置換後の文字列",
+        "example": "wks = REPLACE(\"abc def\", \"abc\", \"xyz\")\nPRINT wks",
+        "insertText": "REPLACE(\"${1:文字列}\", \"${2:置換前の文字}\", \"${3:置換後の文字}\")"
+    },
+    {
+        "label": "SENDSTR",
+        "detail": "文字列を送信",
+        "documentation": "文字列を送信します。",
+        "arguments": [
+            { "name": "ID", "description": "ウィンドウを識別するID" },
+            { "name": "文字列", "description": "送信する文字列" },
+            { "name": "番号", "description": "エディットコントロールの順番", "optional": true },
+            { "name": "送信モード", "description": "送信モード", "optional": true },
+            { "name": "ACC指定", "description": "アクセシビリティ指定", "optional": true }
+        ],
+        "returns": "なし",
+        "example": "SendStr(メモ帳id, \"あああ\")",
+        "insertText": "SENDSTR(${1:ID}, \"${2:文字列}\", ${3:番号}, ${4:送信モード}, ${5:ACC指定})"
+    },
+    {
+        "label": "GETID",
+        "detail": "指定ウィンドウの ID を返す",
+        "documentation": "指定ウィンドウの ID を返します。",
+        "arguments": [
+            { "name": "タイトル", "description": "識別したいウィンドウのタイトル" },
+            { "name": "クラス名", "description": "区別に必要でなければ省略可", "optional": true },
+            { "name": "待ち時間秒", "description": "確認できるまで指定された秒数待つ (0.01～)", "optional": true },
+            { "name": "MDI子タイトル", "description": "MDIウィンドウ中の子ウィンドウタイトル", "optional": true }
+        ],
+        "returns": "ウィンドウを識別するID (NGの時は -1)",
+        "example": "id = GETID(\"メモ帳\")\nPRINT id",
+        "insertText": "GETID(\"${1:タイトル}\", \"${2:クラス名}\", ${3:待ち時間秒}, \"${4:MDI子タイトル}\")"
+    },
+    {
+        "label": "CLKITEM",
+        "detail": "指定アイテムをクリックする",
+        "documentation": "指定アイテムをクリックします。",
+        "arguments": [
+            { "name": "ウィンドウID", "description": "対象ウィンドウのID" },
+            { "name": "アイテム名", "description": "クリックするアイテムの名前" }
+        ],
+        "returns": "なし",
+        "example": "CLKITEM(メモ帳id, \"ファイル\")",
+        "insertText": "CLKITEM(${1:ウィンドウID}, \"${2:アイテム名}\")"
+    },
+    {
+        "label": "GETWINNAME",
+        "detail": "ウィンドウの名前を取得する",
+        "documentation": "指定したウィンドウの名前を取得します。",
+        "arguments": [
+            { "name": "ウィンドウID", "description": "対象ウィンドウのID" }
+        ],
+        "returns": "ウィンドウの名前",
+        "example": "name = GETWINNAME(メモ帳id)\nPRINT name",
+        "insertText": "GETWINNAME(${1:ウィンドウID})"
+    },
+    {
+        "label": "PRINT",
+        "detail": "メッセージを表示する",
+        "documentation": "メッセージを表示します。",
+        "arguments": [
+            { "name": "メッセージ", "description": "表示するメッセージ" }
+        ],
+        "returns": "なし",
+        "example": "PRINT \"Hello, World!\"",
+        "insertText": "PRINT \"${1:メッセージ}\""
+    },
+    {
+        "label": "INPUT",
+        "detail": "インプットボックスを表示する",
+        "documentation": "インプットボックスを表示します。",
+        "arguments": [
+            { "name": "メッセージ", "description": "表示するメッセージ" },
+            { "name": "デフォルト値", "description": "デフォルトの入力値", "optional": true }
+        ],
+        "returns": "入力された文字列",
+        "example": "result = INPUT(\"名前を入力してください:\")\nPRINT result",
+        "insertText": "INPUT(\"${1:メッセージ}\", \"${2:デフォルト値}\")"
+    },
+    {
+        "label": "SLEEP",
+        "detail": "指定時間スリープする",
+        "documentation": "指定した時間だけスリープします。",
+        "arguments": [
+            { "name": "秒", "description": "スリープする秒数（最小0.001）" }
+        ],
+        "returns": "なし",
+        "example": "SLEEP(1)",
+        "insertText": "SLEEP(${1:秒})"
+    },
+    {
+        "label": "MSGBOX",
+        "detail": "メッセージボックスを表示する",
+        "documentation": "メッセージボックスを表示します。",
+        "arguments": [
+            { "name": "メッセージ", "description": "表示するメッセージ" },
+            { "name": "タイトル", "description": "メッセージボックスのタイトル", "optional": true },
+            { "name": "ボタン", "description": "表示するボタンの種類", "optional": true }
+        ],
+        "returns": "押されたボタンのID",
+        "example": "result = MSGBOX(\"続行しますか？\", \"確認\", MB_OKCANCEL)\nPRINT result",
+        "insertText": "MSGBOX(\"${1:メッセージ}\", \"${2:タイトル}\", ${3:ボタン})"
+    },
+    {
+        "label": "SLCTBOX",
+        "detail": "セレクトボックスを表示する",
+        "documentation": "指定した条件でセレクトボックスを表示し、選択された項目を返します。",
+        "arguments": [
+            { "name": "種別", "description": "セレクトボックスの種別" },
+            { "name": "タイムアウト秒", "description": "タイムアウト時間（秒）" },
+            { "name": "x", "description": "X位置（オプション）" },
+            { "name": "y", "description": "Y位置（オプション）" },
+            { "name": "メッセージ", "description": "表示メッセージ（オプション）" },
+            { "name": "項目", "description": "選択項目名" }
+        ],
+        "returns": "選択された項目",
+        "example": "result = SLCTBOX(SLCT_BTN, 10, \"選択してください\", \"項目1\", \"項目2\")\nPRINT result",
+        "insertText": "SLCTBOX(${1:種別}, ${2:タイムアウト秒}, ${3:x}, ${4:y}, \"${5:メッセージ}\", \"${6:項目}\")"
+    },
+    {
+        "label": "POPUPMENU",
+        "detail": "ポップアップメニューを表示する",
+        "documentation": "ポップアップメニューを表示します。",
+        "arguments": [
+            { "name": "メニュー項目", "description": "メニュー項目の配列" }
+        ],
+        "returns": "選択された項目のインデックス",
+        "example": "menuItems = [\"メニュー1\", \"メニュー2\", \"メニュー3\"]\nresult = POPUPMENU(menuItems)\nPRINT result",
+        "insertText": "POPUPMENU(${1:メニュー項目})"
+    },
+    {
+        "label": "CREATEFORM",
+        "detail": "フォームを作成する",
+        "documentation": "フォームを作成します。",
+        "arguments": [
+            { "name": "タイトル", "description": "フォームのタイトル" },
+            { "name": "幅", "description": "フォームの幅" },
+            { "name": "高さ", "description": "フォームの高さ" }
+        ],
+        "returns": "フォームのID",
+        "example": "formID = CREATEFORM(\"サンプルフォーム\", 400, 300)\nPRINT formID",
+        "insertText": "CREATEFORM(\"${1:タイトル}\", ${2:幅}, ${3:高さ})"
+    },
+    {
+        "label": "GETFORMDATA",
+        "detail": "フォームデータを取得する",
+        "documentation": "フォームデータを取得します。",
+        "arguments": [
+            { "name": "フォームID", "description": "対象フォームのID" }
+        ],
+        "returns": "フォームデータ",
+        "example": "data = GETFORMDATA(formID)\nPRINT data",
+        "insertText": "GETFORMDATA(${1:フォームID})"
+    },
+    {
+        "label": "SETFORMDATA",
+        "detail": "フォームデータを設定する",
+        "documentation": "フォームデータを設定します。",
+        "arguments": [
+            { "name": "フォームID", "description": "対象フォームのID" },
+            { "name": "データ", "description": "設定するデータ" }
+        ],
+        "returns": "なし",
+        "example": "SETFORMDATA(formID, \"新しいデータ\")",
+        "insertText": "SETFORMDATA(${1:フォームID}, \"${2:データ}\")"
+    },
+    {
+        "label": "BALLOON",
+        "detail": "吹き出しを表示する",
+        "documentation": "指定した位置に吹き出しを表示します。",
+        "arguments": [
+            { "name": "メッセージ", "description": "表示するメッセージ" },
+            { "name": "x", "description": "X位置" },
+            { "name": "y", "description": "Y位置" },
+            { "name": "向き", "description": "吹き出しの向き" },
+            { "name": "フォントサイズ", "description": "文字フォントサイズ" },
+            { "name": "フォント名", "description": "フォント名" },
+            { "name": "文字色", "description": "文字色 (BGR値)" },
+            { "name": "背景色", "description": "背景色 (BGR値)" },
+            { "name": "透明化", "description": "透明化の度合い" }
+        ],
+        "returns": "なし",
+        "example": "BALLOON(\"こんにちは\", 100, 100, 1, 12, \"MS Gothic\", 0x000000, 0xFFFFFF, 0)",
+        "insertText": "BALLOON(\"${1:メッセージ}\", ${2:x}, ${3:y}, ${4:向き}, ${5:フォントサイズ}, \"${6:フォント名}\", ${7:文字色}, ${8:背景色}, ${9:透明化})"
+    },
+    {
+        "label": "FUKIDASI",
+        "detail": "吹き出しを表示する",
+        "documentation": "指定した位置に吹き出しを表示します。",
+        "arguments": [
+            { "name": "メッセージ", "description": "表示するメッセージ" },
+            { "name": "x", "description": "X位置" },
+            { "name": "y", "description": "Y位置" },
+            { "name": "向き", "description": "吹き出しの向き" },
+            { "name": "フォントサイズ", "description": "文字フォントサイズ" },
+            { "name": "フォント名", "description": "フォント名" },
+            { "name": "文字色", "description": "文字色 (BGR値)" },
+            { "name": "背景色", "description": "背景色 (BGR値)" },
+            { "name": "透明化", "description": "透明化の度合い" }
+        ],
+        "returns": "なし",
+        "example": "FUKIDASI(\"こんにちは\", 100, 100, 1, 12, \"MS Gothic\", 0x000000, 0xFFFFFF, 0)",
+        "insertText": "FUKIDASI(\"${1:メッセージ}\", ${2:x}, ${3:y}, ${4:向き}, ${5:フォントサイズ}, \"${6:フォント名}\", ${7:文字色}, ${8:背景色}, ${9:透明化})"
+    },
+    {
+        "label": "CLKITEM",
+        "detail": "アイテムをクリックする",
+        "documentation": "指定したアイテムをクリックします。",
+        "arguments": [
+            { "name": "ID", "description": "Windowを識別するID" },
+            { "name": "アイテム名", "description": "ボタン、チェックボックス、ラジオボタンのキャプションの文字" },
+            { "name": "種別", "description": "チェックするアイテム種別", "optional": true },
+            { "name": "On/Off", "description": "チェックボックス, メニューでのチェック、およびクリック動作", "optional": true },
+            { "name": "番号", "description": "同名のアイテム名がある場合のオブジェクト順番", "optional": true }
+        ],
+        "returns": "TRUE：正常、 FALSE：処理不能",
+        "example": "result = CLKITEM(1, \"OK\")\nPRINT result",
+        "insertText": "CLKITEM(${1:ID}, \"${2:アイテム名}\", ${3:種別}, ${4:On/Off}, ${5:番号})"
+    },
+    {
+        "label": "CHKBTN",
+        "detail": "ボタンの状態を取得する",
+        "documentation": "指定したボタンの状態を取得します。",
+        "arguments": [
+            { "name": "ID", "description": "Windowを識別するID" },
+            { "name": "アイテム名", "description": "ボタン、チェックボックス、ラジオボタンのキャプションの文字" },
+            { "name": "番号", "description": "同名がある場合のオブジェクト順番", "optional": true },
+            { "name": "ACC指定", "description": "アクセシビリティ用インターフェースを利用するか", "optional": true }
+        ],
+        "returns": "ボタンの状態",
+        "example": "state = CHKBTN(1, \"OK\")\nPRINT state",
+        "insertText": "CHKBTN(${1:ID}, \"${2:アイテム名}\", ${3:番号}, ${4:ACC指定})"
+    },
+    {
+        "label": "CTRLWIN",
+        "detail": "Windowコントロールを操作する",
+        "documentation": "指定したWindowコントロールを操作します。",
+        "arguments": [
+            { "name": "ID", "description": "Windowを識別するID" },
+            { "name": "命令", "description": "操作命令 (CLOSE, ACTIVATE, HIDE, SHOW, MIN, MAX, NORMAL, TOPMOST, NOTOPMOST, TOPNOACTV)" }
+        ],
+        "returns": "なし",
+        "example": "CTRLWIN(1, CLOSE)",
+        "insertText": "CTRLWIN(${1:ID}, ${2:命令})"
+    },
+    {
+        "label": "GETSTR",
+        "detail": "文字列を取得する",
+        "documentation": "指定したコントロールから文字列を取得します。",
+        "arguments": [
+            { "name": "ID", "description": "Windowを識別するID" },
+            { "name": "番号", "description": "左上から数えたコントロールの順番", "optional": true },
+            { "name": "種別", "description": "文字列の種別 (STR_EDIT, STR_STATIC, STR_STATUS, STR_ACC_EDIT, STR_ACC_STATIC, STR_ACC_CELL)", "optional": true },
+            { "name": "マウス移動", "description": "マウスをその場所に移動させるか", "optional": true }
+        ],
+        "returns": "取得した文字列",
+        "example": "text = GETSTR(1, 1, STR_EDIT)\nPRINT text",
+        "insertText": "GETSTR(${1:ID}, ${2:番号}, ${3:種別}, ${4:マウス移動})"
+    },
+    {
+        "label": "GETITEM",
+        "detail": "アイテムを取得する",
+        "documentation": "指定した条件でアイテムを取得します。",
+        "arguments": [
+            { "name": "ID", "description": "Windowを識別するID" },
+            { "name": "種別", "description": "アイテムの種別 (ITM_BTN, ITM_LIST, ITM_TAB, ITM_MENU, ITM_TREEVIEW, ITM_LISTVIEW, ITM_EDIT, ITM_STATIC, ITM_STATUSBAR, ITM_TOOLBAR, ITM_LINK)" },
+            { "name": "番号", "description": "複数存在時の順番指定", "optional": true },
+            { "name": "リストビュー列", "description": "リストビュー時の列指定", "optional": true },
+            { "name": "ディセーブルフラグ", "description": "ディセーブルな物を除外するか", "optional": true },
+            { "name": "最大取得数", "description": "アクセシビリティ経由時の最大取得数", "optional": true }
+        ],
+        "returns": "取得した数",
+        "example": "count = GETITEM(1, ITM_LIST)\nPRINT count",
+        "insertText": "GETITEM(${1:ID}, ${2:種別}, ${3:番号}, ${4:リストビュー列}, ${5:ディセーブルフラグ}, ${6:最大取得数})"
+    },
+    {
+        "label": "GETSLCTLST",
+        "detail": "選択項目を取得する",
+        "documentation": "指定したリストから選択項目を取得します。",
+        "arguments": [
+            { "name": "ID", "description": "Windowを識別するID" },
+            { "name": "番号", "description": "左上から数えたエディトコントロールの順番", "optional": true },
+            { "name": "リストビュー列", "description": "リストビュー時のリストビューの列を指定", "optional": true }
+        ],
+        "returns": "選択されている項目",
+        "example": "selected = GETSLCTLST(1)\nPRINT selected",
+        "insertText": "GETSLCTLST(${1:ID}, ${2:番号}, ${3:リストビュー列})"
+    },
+    {
+        "label": "SETSLIDER",
+        "detail": "スライダーの値を設定する",
+        "documentation": "指定したスライダーの値を設定します。",
+        "arguments": [
+            { "name": "ID", "description": "Windowを識別するID" },
+            { "name": "値", "description": "設定する値" },
+            { "name": "番号", "description": "左上からのコントロールの順番", "optional": true }
+        ],
+        "returns": "TRUE：正常, FALSE：処理不能",
+        "example": "result = SETSLIDER(1, 50)\nPRINT result",
+        "insertText": "SETSLIDER(${1:ID}, ${2:値}, ${3:番号})"
+    },
+    {
+        "label": "GETSLIDER",
+        "detail": "スライダーの値を取得する",
+        "documentation": "指定したスライダーの値を取得します。",
+        "arguments": [
+            { "name": "ID", "description": "Windowを識別するID" },
+            { "name": "番号", "description": "左上からのコントロールの順番", "optional": true },
+            { "name": "パラメータ", "description": "取得するパラメータ (SLD_POS, SLD_MIN, SLD_MAX, SLD_PAGE, SLD_BAR, SLD_X, SLD_Y)", "optional": true }
+        ],
+        "returns": "取得した値",
+        "example": "value = GETSLIDER(1)\nPRINT value",
+        "insertText": "GETSLIDER(${1:ID}, ${2:番号}, ${3:パラメータ})"
+    },
+    {
+        "label": "SCKEY",
+        "detail": "ショートカットキーを実行する",
+        "documentation": "指定したショートカットキーを実行します。",
+        "arguments": [
+            { "name": "ID", "description": "Windowを識別するID" },
+            { "name": "キー", "description": "アルファベット１文字もしくは仮想キー(VK_*)" },
+            { "name": "キー", "description": "追加のキー", "optional": true }
+        ],
+        "returns": "なし",
+        "example": "SCKEY(1, VK_CONTROL, VK_C)",
+        "insertText": "SCKEY(${1:ID}, ${2:キー}, ${3:キー})"
+    },
+    {
+        "label": "GETALLWIN",
+        "detail": "全てのウィンドウを取得する",
+        "documentation": "全てのウィンドウの情報を取得します。",
+        "arguments": [],
+        "returns": "ウィンドウの情報の配列",
+        "example": "windows = GETALLWIN()\nPRINT windows",
+        "insertText": "GETALLWIN()"
+    },
+    {
+        "label": "STATUS",
+        "detail": "ステータスを表示する",
+        "documentation": "指定したメッセージをステータスバーに表示します。",
+        "arguments": [
+            { "name": "メッセージ", "description": "表示するメッセージ" }
+        ],
+        "returns": "なし",
+        "example": "STATUS(\"処理中...\")",
+        "insertText": "STATUS(\"${1:メッセージ}\")"
+    },
+    {
+        "label": "MOUSEORG",
+        "detail": "マウスの原点を設定する",
+        "documentation": "マウスの原点を指定した位置に設定します。",
+        "arguments": [
+            { "name": "x", "description": "X位置" },
+            { "name": "y", "description": "Y位置" }
+        ],
+        "returns": "なし",
+        "example": "MOUSEORG(0, 0)",
+        "insertText": "MOUSEORG(${1:x}, ${2:y})"
+    },
+    {
+        "label": "SAVEIMG",
+        "detail": "画像を保存する",
+        "documentation": "指定した領域のスクリーンショットを保存します。",
+        "arguments": [
+            { "name": "ファイルパス", "description": "保存するファイルのパス" },
+            { "name": "x1", "description": "左上のX位置" },
+            { "name": "y1", "description": "左上のY位置" },
+            { "name": "x2", "description": "右下のX位置" },
+            { "name": "y2", "description": "右下のY位置" }
+        ],
+        "returns": "なし",
+        "example": "SAVEIMG(\"screenshot.png\", 0, 0, 1920, 1080)",
+        "insertText": "SAVEIMG(\"${1:ファイルパス}\", ${2:x1}, ${3:y1}, ${4:x2}, ${5:y2})"
+    },
+    {
+        "label": "MUSCUR",
+        "detail": "マウスカーソルを設定する",
+        "documentation": "指定したマウスカーソルを設定します。",
+        "arguments": [
+            { "name": "カーソルID", "description": "設定するカーソルのID" }
+        ],
+        "returns": "なし",
+        "example": "MUSCUR(1)",
+        "insertText": "MUSCUR(${1:カーソルID})"
+    },
+    {
+        "label": "POSACC",
+        "detail": "アクセシビリティの位置を取得する",
+        "documentation": "指定したアクセシビリティオブジェクトの位置を取得します。",
+        "arguments": [
+            { "name": "オブジェクトID", "description": "アクセシビリティオブジェクトのID" }
+        ],
+        "returns": "位置情報",
+        "example": "position = POSACC(1)\nPRINT position",
+        "insertText": "POSACC(${1:オブジェクトID})"
+    },
+    {
+        "label": "STOPFORM",
+        "detail": "フォームを停止する",
+        "documentation": "指定したフォームを停止します。",
+        "arguments": [
+            { "name": "フォームID", "description": "停止するフォームのID" }
+        ],
+        "returns": "なし",
+        "example": "STOPFORM(1)",
+        "insertText": "STOPFORM(${1:フォームID})"
+    },
+    {
+        "label": "LOGPRINT",
+        "detail": "ログを出力する",
+        "documentation": "指定したメッセージをログに出力します。",
+        "arguments": [
+            { "name": "メッセージ", "description": "出力するメッセージ" }
+        ],
+        "returns": "なし",
+        "example": "LOGPRINT(\"処理が完了しました\")",
+        "insertText": "LOGPRINT(\"${1:メッセージ}\")"
+    },
+    {
+        "label": "MONITOR",
+        "detail": "モニター情報を取得する",
+        "documentation": "モニターの情報を取得します。",
+        "arguments": [],
+        "returns": "モニター情報の配列",
+        "example": "monitors = MONITOR()\nPRINT monitors",
+        "insertText": "MONITOR()"
+    },
+    {
+        "label": "EXEC",
+        "detail": "プログラムを実行する",
+        "documentation": "指定したプログラムを実行します。",
+        "arguments": [
+            { "name": "プログラムパス", "description": "実行するプログラムのパス" },
+            { "name": "引数", "description": "プログラムに渡す引数", "optional": true }
+        ],
+        "returns": "なし",
+        "example": "EXEC(\"notepad.exe\", \"test.txt\")",
+        "insertText": "EXEC(\"${1:プログラムパス}\", \"${2:引数}\")"
+    },
+    {
+        "label": "SLEEP",
+        "detail": "スリープする",
+        "documentation": "指定した時間だけスリープします。",
+        "arguments": [
+            { "name": "ミリ秒", "description": "スリープする時間（ミリ秒）" }
+        ],
+        "returns": "なし",
+        "example": "SLEEP(1000)",
+        "insertText": "SLEEP(${1:ミリ秒})"
+    },
+    {
+        "label": "DOSCMD",
+        "detail": "DOSコマンドを実行する",
+        "documentation": "指定したDOSコマンドを実行します。",
+        "arguments": [
+            { "name": "コマンド", "description": "実行するDOSコマンド" }
+        ],
+        "returns": "コマンドの実行結果",
+        "example": "result = DOSCMD(\"dir\")\nPRINT result",
+        "insertText": "DOSCMD(\"${1:コマンド}\")"
+    },
+    {
+        "label": "POWERSHELL",
+        "detail": "PowerShellコマンドを実行する",
+        "documentation": "指定したPowerShellコマンドを実行します。",
+        "arguments": [
+            { "name": "コマンド", "description": "実行するPowerShellコマンド" }
+        ],
+        "returns": "コマンドの実行結果",
+        "example": "result = POWERSHELL(\"Get-Process\")\nPRINT result",
+        "insertText": "POWERSHELL(\"${1:コマンド}\")"
+    },
+    {
+        "label": "SOUND",
+        "detail": "サウンドを再生する",
+        "documentation": "指定したサウンドを再生します。",
+        "arguments": [
+            { "name": "ファイルパス", "description": "再生するサウンドファイルのパス" }
+        ],
+        "returns": "なし",
+        "example": "SOUND(\"C:\\Windows\\Media\\tada.wav\")",
+        "insertText": "SOUND(\"${1:ファイルパス}\")"
+    },
+    {
+        "label": "GETTIME",
+        "detail": "現在の時間を取得する",
+        "documentation": "現在の時間を取得します。",
+        "arguments": [],
+        "returns": "現在の時間",
+        "example": "time = GETTIME()\nPRINT time",
+        "insertText": "GETTIME()"
+    },
+    {
+        "label": "POFF",
+        "detail": "システムをシャットダウンする",
+        "documentation": "システムをシャットダウンします。",
+        "arguments": [],
+        "returns": "なし",
+        "example": "POFF()",
+        "insertText": "POFF()"
+    },
+    {
+        "label": "KINDOFOS",
+        "detail": "OSの種類を取得する",
+        "documentation": "現在のOSの種類を取得します。",
+        "arguments": [],
+        "returns": "OSの種類",
+        "example": "osType = KINDOFOS()\nPRINT osType",
+        "insertText": "KINDOFOS()"
+    },
+    {
+        "label": "CPUUSERATE",
+        "detail": "CPU使用率を取得する",
+        "documentation": "現在のCPU使用率を取得します。",
+        "arguments": [],
+        "returns": "CPU使用率",
+        "example": "cpuUsage = CPUUSERATE()\nPRINT cpuUsage",
+        "insertText": "CPUUSERATE()"
+    },
+    {
+        "label": "SETHOTKEY",
+        "detail": "ホットキーを設定する",
+        "documentation": "指定したホットキーを設定します。",
+        "arguments": [
+            { "name": "キー", "description": "設定するホットキー" },
+            { "name": "コマンド", "description": "ホットキーが押されたときに実行するコマンド" }
+        ],
+        "returns": "なし",
+        "example": "SETHOTKEY(\"F1\", \"PRINT 'Hello'\")",
+        "insertText": "SETHOTKEY(\"${1:キー}\", \"${2:コマンド}\")"
+    },
+    {
+        "label": "LOCKHARD",
+        "detail": "ハードウェアをロックする",
+        "documentation": "指定したハードウェアをロックします。",
+        "arguments": [
+            { "name": "デバイスID", "description": "ロックするデバイスのID" }
+        ],
+        "returns": "なし",
+        "example": "LOCKHARD(1)",
+        "insertText": "LOCKHARD(${1:デバイスID})"
+    },
+    {
+        "label": "LOCKHARDEX",
+        "detail": "ハードウェアを拡張ロックする",
+        "documentation": "指定したハードウェアを拡張ロックします。",
+        "arguments": [
+            { "name": "デバイスID", "description": "ロックするデバイスのID" },
+            { "name": "オプション", "description": "ロックオプション" }
+        ],
+        "returns": "なし",
+        "example": "LOCKHARDEX(1, \"オプション\")",
+        "insertText": "LOCKHARDEX(${1:デバイスID}, \"${2:オプション}\")"
+    },
+    {
+        "label": "EVAL",
+        "detail": "式を評価する",
+        "documentation": "指定した式を評価します。",
+        "arguments": [
+            { "name": "式", "description": "評価する式" }
+        ],
+        "returns": "評価結果",
+        "example": "result = EVAL(\"1 + 1\")\nPRINT result",
+        "insertText": "EVAL(\"${1:式}\")"
+    },
+    {
+        "label": "SENSOR",
+        "detail": "センサーの値を取得する",
+        "documentation": "指定したセンサーの値を取得します。",
+        "arguments": [
+            { "name": "センサーID", "description": "取得するセンサーのID" }
+        ],
+        "returns": "センサーの値",
+        "example": "value = SENSOR(1)\nPRINT value",
+        "insertText": "SENSOR(${1:センサーID})"
+    },
+    {
+        "label": "GETCTLHND",
+        "detail": "コントロールハンドルを取得する",
+        "documentation": "指定したコントロールのハンドルを取得します。",
+        "arguments": [
+            { "name": "ID", "description": "Windowを識別するID" }
+        ],
+        "returns": "コントロールのハンドル",
+        "example": "handle = GETCTLHND(1)\nPRINT handle",
+        "insertText": "GETCTLHND(${1:ID})"
+    },
+    {
+        "label": "IDTOHND",
+        "detail": "IDからハンドルを取得する",
+        "documentation": "指定したIDからハンドルを取得します。",
+        "arguments": [
+            { "name": "ID", "description": "Windowを識別するID" }
+        ],
+        "returns": "ハンドル",
+        "example": "handle = IDTOHND(1)\nPRINT handle",
+        "insertText": "IDTOHND(${1:ID})"
+    },
+    {
+        "label": "HNDTOID",
+        "detail": "ハンドルからIDを取得する",
+        "documentation": "指定したハンドルからIDを取得します。",
+        "arguments": [
+            { "name": "ハンドル", "description": "コントロールのハンドル" }
+        ],
+        "returns": "ID",
+        "example": "id = HNDTOID(handle)\nPRINT id",
+        "insertText": "HNDTOID(${1:ハンドル})"
+    },
+    {
+        "label": "VARTYPE",
+        "detail": "変数の型を取得する",
+        "documentation": "指定した変数の型を取得します。",
+        "arguments": [
+            { "name": "変数", "description": "対象の変数" }
+        ],
+        "returns": "変数の型",
+        "example": "type = VARTYPE(variable)\nPRINT type",
+        "insertText": "VARTYPE(${1:変数})"
+    },
+    {
+        "label": "MMV",
+        "detail": "マウスを移動する",
+        "documentation": "指定した位置にマウスを移動します。",
+        "arguments": [
+            { "name": "x", "description": "X位置" },
+            { "name": "y", "description": "Y位置" }
+        ],
+        "returns": "なし",
+        "example": "MMV(100, 200)",
+        "insertText": "MMV(${1:x}, ${2:y})"
+    },
+    {
+        "label": "BTN",
+        "detail": "ボタンをクリックする",
+        "documentation": "指定したボタンをクリックします。",
+        "arguments": [
+            { "name": "ボタン", "description": "クリックするボタン (LEFT, RIGHT, MIDDLE)" }
+        ],
+        "returns": "なし",
+        "example": "BTN(LEFT)",
+        "insertText": "BTN(${1:ボタン})"
+    },
+    {
+        "label": "KBD",
+        "detail": "キーボード入力をシミュレートする",
+        "documentation": "指定したキーを入力します。",
+        "arguments": [
+            { "name": "キー", "description": "入力するキー" }
+        ],
+        "returns": "なし",
+        "example": "KBD(\"A\")",
+        "insertText": "KBD(\"${1:キー}\")"
+    },
+    {
+        "label": "ACW",
+        "detail": "アクティブウィンドウを取得する",
+        "documentation": "現在のアクティブウィンドウを取得します。",
+        "arguments": [],
+        "returns": "アクティブウィンドウのハンドル",
+        "example": "handle = ACW()\nPRINT handle",
+        "insertText": "ACW()"
+    },
+    {
+        "label": "COPY",
+        "detail": "文字列をコピーする",
+        "documentation": "指定した文字列をコピーします。",
+        "arguments": [
+            { "name": "文字列", "description": "コピーする文字列" }
+        ],
+        "returns": "なし",
+        "example": "COPY(\"Hello World\")",
+        "insertText": "COPY(\"${1:文字列}\")"
+    },
+    {
+        "label": "POS",
+        "detail": "文字列の位置を取得する",
+        "documentation": "指定した文字列の位置を取得します。",
+        "arguments": [
+            { "name": "検索文字列", "description": "検索する文字列" },
+            { "name": "対象文字列", "description": "対象の文字列" }
+        ],
+        "returns": "位置",
+        "example": "position = POS(\"World\", \"Hello World\")\nPRINT position",
+        "insertText": "POS(\"${1:検索文字列}\", \"${2:対象文字列}\")"
+    },
+    {
+        "label": "LENGTH",
+        "detail": "文字列の長さを取得する",
+        "documentation": "指定した文字列の長さを取得します。",
+        "arguments": [
+            { "name": "文字列", "description": "対象の文字列" }
+        ],
+        "returns": "文字列の長さ",
+        "example": "length = LENGTH(\"Hello World\")\nPRINT length",
+        "insertText": "LENGTH(\"${1:文字列}\")"
+    },
+    {
+        "label": "CHKNUM",
+        "detail": "数値かどうかをチェックする",
+        "documentation": "指定した文字列が数値かどうかをチェックします。",
+        "arguments": [
+            { "name": "文字列", "description": "チェックする文字列" }
+        ],
+        "returns": "TRUE：数値, FALSE：数値でない",
+        "example": "isNumber = CHKNUM(\"123\")\nPRINT isNumber",
+        "insertText": "CHKNUM(\"${1:文字列}\")"
+    },
+    {
+        "label": "REPLACE",
+        "detail": "文字列を置換する",
+        "documentation": "指定した文字列を置換します。",
+        "arguments": [
+            { "name": "対象文字列", "description": "対象の文字列" },
+            { "name": "検索文字列", "description": "検索する文字列" },
+            { "name": "置換文字列", "description": "置換する文字列" }
+        ],
+        "returns": "置換後の文字列",
+        "example": "result = REPLACE(\"Hello World\", \"World\", \"UWSC\")\nPRINT result",
+        "insertText": "REPLACE(\"${1:対象文字列}\", \"${2:検索文字列}\", \"${3:置換文字列}\")"
+    },
+    {
+        "label": "CHGMOJ",
+        "detail": "文字コードを変換する",
+        "documentation": "指定した文字列の文字コードを変換します。",
+        "arguments": [
+            { "name": "文字列", "description": "対象の文字列" },
+            { "name": "変換元コード", "description": "変換元の文字コード" },
+            { "name": "変換先コード", "description": "変換先の文字コード" }
+        ],
+        "returns": "変換後の文字列",
+        "example": "result = CHGMOJ(\"こんにちは\", \"Shift_JIS\", \"UTF-8\")\nPRINT result",
+        "insertText": "CHGMOJ(\"${1:文字列}\", \"${2:変換元コード}\", \"${3:変換先コード}\")"
+    },
+    {
+        "label": "TRIM",
+        "detail": "文字列の空白を削除する",
+        "documentation": "指定した文字列の前後の空白を削除します。",
+        "arguments": [
+            { "name": "文字列", "description": "対象の文字列" }
+        ],
+        "returns": "空白を削除した文字列",
+        "example": "result = TRIM(\"  Hello World  \")\nPRINT result",
+        "insertText": "TRIM(\"${1:文字列}\")"
+    },
+    {
+        "label": "FORMAT",
+        "detail": "文字列をフォーマットする",
+        "documentation": "指定したフォーマットで文字列をフォーマットします。",
+        "arguments": [
+            { "name": "フォーマット", "description": "フォーマット文字列" },
+            { "name": "値", "description": "フォーマットする値" }
+        ],
+        "returns": "フォーマットされた文字列",
+        "example": "result = FORMAT(\"%04d\", 5)\nPRINT result",
+        "insertText": "FORMAT(\"${1:フォーマット}\", ${2:値})"
+    },
+    {
+        "label": "CHR",
+        "detail": "文字コードから文字を返す",
+        "documentation": "指定した文字コードから文字を返します。",
+        "arguments": [
+            { "name": "文字コード", "description": "UNICODE" }
+        ],
+        "returns": "文字",
+        "example": "result = CHR(65)\nPRINT result",
+        "insertText": "CHR(${1:文字コード})"
+    },
+    {
+        "label": "ASC",
+        "detail": "文字から文字コードを返す",
+        "documentation": "指定した文字から文字コードを返します。",
+        "arguments": [
+            { "name": "文字", "description": "先頭の１文字を処理" }
+        ],
+        "returns": "UNICODE",
+        "example": "result = ASC(\"A\")\nPRINT result",
+        "insertText": "ASC(\"${1:文字}\")"
+    },
+    {
+        "label": "ISUNICODE",
+        "detail": "文字列にUNICODE専用文字が含まれているかを調べる",
+        "documentation": "指定した文字列にUNICODE専用文字が含まれているかを調べます。",
+        "arguments": [
+            { "name": "文字列", "description": "調べる文字列" }
+        ],
+        "returns": "TRUE：あり、 FALSE：なし",
+        "example": "result = ISUNICODE(\"こんにちは\")\nPRINT result",
+        "insertText": "ISUNICODE(\"${1:文字列}\")"
+    },
+    {
+        "label": "STRCONV",
+        "detail": "文字列を変換する",
+        "documentation": "指定した文字列を変換します。",
+        "arguments": [
+            { "name": "文字列", "description": "変換する文字列" },
+            { "name": "変換指定", "description": "変換指定 (SC_LOWERCASE, SC_UPPERCASE, SC_HIRAGANA, SC_KATAKANA, SC_HALFWIDTH, SC_FULLWIDTH)" }
+        ],
+        "returns": "変換された文字列",
+        "example": "result = STRCONV(\"abc\", SC_UPPERCASE)\nPRINT result",
+        "insertText": "STRCONV(\"${1:文字列}\", ${2:変換指定})"
+    },
+    {
+        "label": "TOKEN",
+        "detail": "トークンの切り出し",
+        "documentation": "指定文字で区切ったトークンを返します。",
+        "arguments": [
+            { "name": "区切文字", "description": "区切る文字" },
+            { "name": "文字列", "description": "区切られる文字列" },
+            { "name": "区切方法", "description": "区切方法", "optional": true },
+            { "name": "ダブルコーテイション", "description": "ダブルコーテイションの扱い", "optional": true }
+        ],
+        "returns": "切り出されたトークン",
+        "example": "result = TOKEN(\",\", \"a,b,c\")\nPRINT result",
+        "insertText": "TOKEN(\"${1:区切文字}\", \"${2:文字列}\", ${3:区切方法}, ${4:ダブルコーテイション})"
+    },
+    {
+        "label": "BETWEENSTR",
+        "detail": "文字列の間の文字を取得する",
+        "documentation": "指定した文字列の間の文字を取得します。",
+        "arguments": [
+            { "name": "文字列", "description": "対象の文字列" },
+            { "name": "開始文字", "description": "開始文字" },
+            { "name": "終了文字", "description": "終了文字" }
+        ],
+        "returns": "間の文字列",
+        "example": "result = BETWEENSTR(\"<tag>value</tag>\", \"<tag>\", \"</tag>\")\nPRINT result",
+        "insertText": "BETWEENSTR(\"${1:文字列}\", \"${2:開始文字}\", \"${3:終了文字}\")"
+    },
+    {
+        "label": "RESIZE",
+        "detail": "配列のサイズを変更する",
+        "documentation": "指定した配列のサイズを変更します。",
+        "arguments": [
+            { "name": "配列変数", "description": "配列変数名" },
+            { "name": "新しいサイズ", "description": "新しいサイズ" }
+        ],
+        "returns": "なし",
+        "example": "RESIZE(array, 10)",
+        "insertText": "RESIZE(${1:配列変数}, ${2:新しいサイズ})"
+    },
+    {
+        "label": "SETCLEAR",
+        "detail": "配列をクリアする",
+        "documentation": "指定した配列をクリアします。",
+        "arguments": [
+            { "name": "配列変数", "description": "配列変数名" },
+            { "name": "値", "description": "埋める値", "optional": true }
+        ],
+        "returns": "なし",
+        "example": "SETCLEAR(array)",
+        "insertText": "SETCLEAR(${1:配列変数}, ${2:値})"
+    },
+    {
+        "label": "SHIFTARRAY",
+        "detail": "配列データをシフトする",
+        "documentation": "指定した配列データをシフトします。",
+        "arguments": [
+            { "name": "配列変数", "description": "配列変数名" },
+            { "name": "シフト値", "description": "シフト値" }
+        ],
+        "returns": "なし",
+        "example": "SHIFTARRAY(array, 1)",
+        "insertText": "SHIFTARRAY(${1:配列変数}, ${2:シフト値})"
+    },
+    {
+        "label": "CALCARRAY",
+        "detail": "配列データを計算する",
+        "documentation": "指定した配列データを計算します。",
+        "arguments": [
+            { "name": "配列変数", "description": "配列変数名" },
+            { "name": "計算法", "description": "計算法 (CALC_ADD, CALC_MIN, CALC_MAX, CALC_AVR)" },
+            { "name": "開始", "description": "計算する開始位置", "optional": true },
+            { "name": "終了", "description": "計算する終了位置", "optional": true }
+        ],
+        "returns": "計算結果",
+        "example": "result = CALCARRAY(array, CALC_ADD)\nPRINT result",
+        "insertText": "CALCARRAY(${1:配列変数}, ${2:計算法}, ${3:開始}, ${4:終了})"
+    },
+    {
+        "label": "SPLIT",
+        "detail": "文字列を区切り配列を作成する",
+        "documentation": "指定した文字列を区切り配列を作成します。",
+        "arguments": [
+            { "name": "文字列", "description": "区切り文字列を含んだ文字列" },
+            { "name": "区切文字列", "description": "区切る為の文字列", "optional": true },
+            { "name": "空文字処理フラグ", "description": "空文字処理フラグ", "optional": true },
+            { "name": "数値処理フラグ", "description": "数値処理フラグ", "optional": true }
+        ],
+        "returns": "作成された一次元配列",
+        "example": "result = SPLIT(\"a,b,c\", \",\")\nPRINT result",
+        "insertText": "SPLIT(\"${1:文字列}\", \"${2:区切文字列}\", ${3:空文字処理フラグ}, ${4:数値処理フラグ})"
+    },
+    {
+        "label": "JOIN",
+        "detail": "配列の中を指定範囲の配列で返す",
+        "documentation": "指定した配列の中を指定範囲の配列で返します。",
+        "arguments": [
+            { "name": "配列変数", "description": "配列変数名" },
+            { "name": "区切文字列", "description": "結合に使用する区切文字列", "optional": true },
+            { "name": "空文字処理フラグ", "description": "空文字処理フラグ", "optional": true },
+            { "name": "開始", "description": "結合する配列の開始位置", "optional": true },
+            { "name": "終了", "description": "結合する配列の終了位置", "optional": true }
+        ],
+        "returns": "作成された文字列",
+        "example": "result = JOIN(array, \",\")\nPRINT result",
+        "insertText": "JOIN(${1:配列変数}, \"${2:区切文字列}\", ${3:空文字処理フラグ}, ${4:開始}, ${5:終了})"
+    },
+    {
+        "label": "SLICE",
+        "detail": "配列のスライスを取得する",
+        "documentation": "指定した配列のスライスを取得します。",
+        "arguments": [
+            { "name": "配列", "description": "対象の配列" },
+            { "name": "開始", "description": "スライスの開始位置" },
+            { "name": "終了", "description": "スライスの終了位置", "optional": true }
+        ],
+        "returns": "スライスされた配列",
+        "example": "result = SLICE(array, 1, 3)\nPRINT result",
+        "insertText": "SLICE(${1:配列}, ${2:開始}, ${3:終了})"
+    },
+    {
+        "label": "QSORT",
+        "detail": "配列をソートする",
+        "documentation": "指定した配列をクイックソートします。",
+        "arguments": [
+            { "name": "配列", "description": "対象の配列" }
+        ],
+        "returns": "ソートされた配列",
+        "example": "result = QSORT(array)\nPRINT result",
+        "insertText": "QSORT(${1:配列})"
+    },
+    {
+        "label": "FOPEN",
+        "detail": "ファイルを開く",
+        "documentation": "指定したファイルを開きます。",
+        "arguments": [
+            { "name": "ファイルパス", "description": "開くファイルのパス" },
+            { "name": "モード", "description": "ファイルを開くモード (READ, WRITE, APPEND)" }
+        ],
+        "returns": "ファイルハンドル",
+        "example": "handle = FOPEN(\"test.txt\", READ)\nPRINT handle",
+        "insertText": "FOPEN(\"${1:ファイルパス}\", ${2:モード})"
+    },
+    {
+        "label": "FGET",
+        "detail": "ファイルからデータを読み取る",
+        "documentation": "指定したファイルからデータを読み取ります。",
+        "arguments": [
+            { "name": "ファイルハンドル", "description": "ファイルハンドル" }
+        ],
+        "returns": "読み取ったデータ",
+        "example": "data = FGET(handle)\nPRINT data",
+        "insertText": "FGET(${1:ファイルハンドル})"
+    },
+    {
+        "label": "FPUT",
+        "detail": "ファイルにデータを書き込む",
+        "documentation": "指定したファイルにデータを書き込みます。",
+        "arguments": [
+            { "name": "ファイルハンドル", "description": "ファイルハンドル" },
+            { "name": "データ", "description": "書き込むデータ" }
+        ],
+        "returns": "なし",
+        "example": "FPUT(handle, \"Hello World\")",
+        "insertText": "FPUT(${1:ファイルハンドル}, \"${2:データ}\")"
+    },
+    {
+        "label": "FDELLINE",
+        "detail": "ファイルから行を削除する",
+        "documentation": "指定したファイルから行を削除します。",
+        "arguments": [
+            { "name": "ファイルハンドル", "description": "ファイルハンドル" },
+            { "name": "行番号", "description": "削除する行番号" }
+        ],
+        "returns": "なし",
+        "example": "FDELLINE(handle, 2)",
+        "insertText": "FDELLINE(${1:ファイルハンドル}, ${2:行番号})"
+    },
+    {
+        "label": "FCLOSE",
+        "detail": "ファイルを閉じる",
+        "documentation": "指定したファイルを閉じます。",
+        "arguments": [
+            { "name": "ファイルハンドル", "description": "ファイルハンドル" }
+        ],
+        "returns": "なし",
+        "example": "FCLOSE(handle)",
+        "insertText": "FCLOSE(${1:ファイルハンドル})"
+    },
+    {
+        "label": "DELETEFILE",
+        "detail": "ファイルを削除する",
+        "documentation": "指定したファイルを削除します。",
+        "arguments": [
+            { "name": "ファイルパス", "description": "削除するファイルのパス" }
+        ],
+        "returns": "なし",
+        "example": "DELETEFILE(\"test.txt\")",
+        "insertText": "DELETEFILE(\"${1:ファイルパス}\")"
+    },
+    {
+        "label": "GETDIR",
+        "detail": "ディレクトリの内容を取得する",
+        "documentation": "指定したディレクトリの内容を取得します。",
+        "arguments": [
+            { "name": "ディレクトリパス", "description": "ディレクトリのパス" }
+        ],
+        "returns": "ディレクトリの内容",
+        "example": "contents = GETDIR(\"C:\\\")\nPRINT contents",
+        "insertText": "GETDIR(\"${1:ディレクトリパス}\")"
+    },
+    {
+        "label": "DROPFILE",
+        "detail": "ファイルをドロップする",
+        "documentation": "指定したファイルをドロップします。",
+        "arguments": [
+            { "name": "ファイルパス", "description": "ドロップするファイルのパス" },
+            { "name": "x", "description": "ドロップ位置のX座標" },
+            { "name": "y", "description": "ドロップ位置のY座標" }
+        ],
+        "returns": "なし",
+        "example": "DROPFILE(\"test.txt\", 100, 200)",
+        "insertText": "DROPFILE(\"${1:ファイルパス}\", ${2:x}, ${3:y})"
+    },
+    {
+        "label": "READINI",
+        "detail": "INIファイルから値を読み取る",
+        "documentation": "指定したINIファイルから値を読み取ります。",
+        "arguments": [
+            { "name": "ファイルパス", "description": "INIファイルのパス" },
+            { "name": "セクション", "description": "セクション名" },
+            { "name": "キー", "description": "キー名" }
+        ],
+        "returns": "読み取った値",
+        "example": "value = READINI(\"config.ini\", \"Settings\", \"Username\")\nPRINT value",
+        "insertText": "READINI(\"${1:ファイルパス}\", \"${2:セクション}\", \"${3:キー}\")"
+    },
+    {
+        "label": "WRITEINI",
+        "detail": "INIファイルに値を書き込む",
+        "documentation": "指定したINIファイルに値を書き込みます。",
+        "arguments": [
+            { "name": "ファイルパス", "description": "INIファイルのパス" },
+            { "name": "セクション", "description": "セクション名" },
+            { "name": "キー", "description": "キー名" },
+            { "name": "値", "description": "書き込む値" }
+        ],
+        "returns": "なし",
+        "example": "WRITEINI(\"config.ini\", \"Settings\", \"Username\", \"user123\")",
+        "insertText": "WRITEINI(\"${1:ファイルパス}\", \"${2:セクション}\", \"${3:キー}\", \"${4:値}\")"
+    },
+    {
+        "label": "DELETEINI",
+        "detail": "INIファイルからキーを削除する",
+        "documentation": "指定したINIファイルからキーを削除します。",
+        "arguments": [
+            { "name": "ファイルパス", "description": "INIファイルのパス" },
+            { "name": "セクション", "description": "セクション名" },
+            { "name": "キー", "description": "キー名" }
+        ],
+        "returns": "なし",
+        "example": "DELETEINI(\"config.ini\", \"Settings\", \"Username\")",
+        "insertText": "DELETEINI(\"${1:ファイルパス}\", \"${2:セクション}\", \"${3:キー}\")"
+    },
+    {
+        "label": "CREATEOLEOBJ",
+        "detail": "OLEオブジェクトを作成する",
+        "documentation": "指定したOLEオブジェクトを作成します。",
+        "arguments": [
+            { "name": "プロギッド", "description": "作成するOLEオブジェクトのProgID" }
+        ],
+        "returns": "OLEオブジェクト",
+        "example": "obj = CREATEOLEOBJ(\"Excel.Application\")\nPRINT obj",
+        "insertText": "CREATEOLEOBJ(\"${1:プロギッド}\")"
+    },
+    {
+        "label": "GETACTIVEOLEOBJ",
+        "detail": "アクティブなOLEオブジェクトを取得する",
+        "documentation": "アクティブなOLEオブジェクトを取得します。",
+        "arguments": [
+            { "name": "プロギッド", "description": "取得するOLEオブジェクトのProgID" }
+        ],
+        "returns": "OLEオブジェクト",
+        "example": "obj = GETACTIVEOLEOBJ(\"Excel.Application\")\nPRINT obj",
+        "insertText": "GETACTIVEOLEOBJ(\"${1:プロギッド}\")"
+    },
+    {
+        "label": "GETOLEITEM",
+        "detail": "OLEオブジェクトのアイテムを取得する",
+        "documentation": "指定したOLEオブジェクトのアイテムを取得します。",
+        "arguments": [
+            { "name": "OLEオブジェクト", "description": "対象のOLEオブジェクト" },
+            { "name": "アイテム名", "description": "取得するアイテム名" }
+        ],
+        "returns": "OLEアイテム",
+        "example": "item = GETOLEITEM(obj, \"Workbooks\")\nPRINT item",
+        "insertText": "GETOLEITEM(${1:OLEオブジェクト}, \"${2:アイテム名}\")"
+    },
+    {
+        "label": "OLEEVENT",
+        "detail": "OLEイベントを設定する",
+        "documentation": "指定したOLEオブジェクトにイベントを設定します。",
+        "arguments": [
+            { "name": "OLEオブジェクト", "description": "対象のOLEオブジェクト" },
+            { "name": "イベント名", "description": "設定するイベント名" },
+            { "name": "イベントハンドラ", "description": "イベントハンドラ" }
+        ],
+        "returns": "なし",
+        "example": "OLEEVENT(obj, \"OnClick\", \"EventHandler\")",
+        "insertText": "OLEEVENT(${1:OLEオブジェクト}, \"${2:イベント名}\", \"${3:イベントハンドラ}\")"
+    },
+    {
+        "label": "SAFEARRAY",
+        "detail": "セーフアレイを作成する",
+        "documentation": "指定したサイズのセーフアレイを作成します。",
+        "arguments": [
+            { "name": "サイズ", "description": "作成するセーフアレイのサイズ" }
+        ],
+        "returns": "セーフアレイ",
+        "example": "array = SAFEARRAY(10)\nPRINT array",
+        "insertText": "SAFEARRAY(${1:サイズ})"
+    },
+    {
+        "label": "SPEAK",
+        "detail": "テキストを音声で読み上げる",
+        "documentation": "指定したテキストを音声で読み上げます。",
+        "arguments": [
+            { "name": "テキスト", "description": "読み上げるテキスト" }
+        ],
+        "returns": "なし",
+        "example": "SPEAK(\"こんにちは\")",
+        "insertText": "SPEAK(\"${1:テキスト}\")"
+    },
+    {
+        "label": "RECOSTATE",
+        "detail": "音声認識の状態を設定する",
+        "documentation": "音声認識の状態を設定します。",
+        "arguments": [
+            { "name": "状態", "description": "設定する状態 (START, STOP, PAUSE)" }
+        ],
+        "returns": "なし",
+        "example": "RECOSTATE(START)",
+        "insertText": "RECOSTATE(${1:状態})"
+    },
+    {
+        "label": "DICTATE",
+        "detail": "音声認識結果を取得する",
+        "documentation": "音声認識結果を取得します。",
+        "arguments": [],
+        "returns": "音声認識結果",
+        "example": "result = DICTATE()\nPRINT result",
+        "insertText": "DICTATE()"
+    },
+    {
+        "label": "IEGETDATA",
+        "detail": "Web上(IE)のデータを取得する",
+        "documentation": "指定した条件でWeb上(IE)のデータを取得します。",
+        "arguments": [
+            { "name": "IE", "description": "IEオブジェクト" },
+            { "name": "タグ名", "description": "取得するタグ名" },
+            { "name": "順番", "description": "タグの順番", "optional": true },
+            { "name": "Y", "description": "Y座標", "optional": true },
+            { "name": "X", "description": "X座標", "optional": true }
+        ],
+        "returns": "取得したデータ",
+        "example": "data = IEGETDATA(IE, \"TAG=TABLE\", 1, 2, 3)\nPRINT data",
+        "insertText": "IEGETDATA(${1:IE}, \"${2:タグ名}\", ${3:順番}, ${4:Y}, ${5:X})"
+    },
+    {
+        "label": "IESETDATA",
+        "detail": "Web上(IE)に値を設定する",
+        "documentation": "指定した条件でWeb上(IE)に値を設定します。",
+        "arguments": [
+            { "name": "IE", "description": "IEオブジェクト" },
+            { "name": "値", "description": "設定する値" },
+            { "name": "Name", "description": "値を設定するエレメントのName" },
+            { "name": "Value", "description": "ラジオボタン等でNameが共通の場合に指定する値", "optional": true },
+            { "name": "番号", "description": "Name, Valueが同じ場合の順番", "optional": true }
+        ],
+        "returns": "TRUE：正常、 FALSE：処理不能",
+        "example": "result = IESETDATA(IE, \"値\", \"Name\")\nPRINT result",
+        "insertText": "IESETDATA(${1:IE}, \"${2:値}\", \"${3:Name}\", ${4:Value}, ${5:番号})"
+    },
+    {
+        "label": "IEGETSRC",
+        "detail": "Web上(IE)の指定タグのソースを取得する",
+        "documentation": "指定したタグのソースを取得します。",
+        "arguments": [
+            { "name": "IE", "description": "IEオブジェクト" },
+            { "name": "タグ名", "description": "ソースを取得するタグ名" },
+            { "name": "番号", "description": "タグの順番", "optional": true }
+        ],
+        "returns": "取得したソース",
+        "example": "src = IEGETSRC(IE, \"DIV\", 1)\nPRINT src",
+        "insertText": "IEGETSRC(${1:IE}, \"${2:タグ名}\", ${3:番号})"
+    },
+    {
+        "label": "IESETSRC",
+        "detail": "Web上(IE)の指定タグのソースを書き換える",
+        "documentation": "指定したタグのソースを書き換えます。",
+        "arguments": [
+            { "name": "IE", "description": "IEオブジェクト" },
+            { "name": "ソース", "description": "書き換えるソース" },
+            { "name": "タグ名", "description": "ソースを変更するタグ名" },
+            { "name": "番号", "description": "タグの順番", "optional": true }
+        ],
+        "returns": "なし",
+        "example": "IESETSRC(IE, \"<div>新しい内容</div>\", \"DIV\", 1)",
+        "insertText": "IESETSRC(${1:IE}, \"${2:ソース}\", \"${3:タグ名}\", ${4:番号})"
+    },
+    {
+        "label": "IELINK",
+        "detail": "Web上(IE)のリンクをクリックする",
+        "documentation": "指定したリンクをクリックします。",
+        "arguments": [
+            { "name": "IE", "description": "IEオブジェクト" },
+            { "name": "リンクテキスト", "description": "クリックするリンクのテキスト" },
+            { "name": "番号", "description": "リンクの順番", "optional": true }
+        ],
+        "returns": "なし",
+        "example": "IELINK(IE, \"次へ\", 1)",
+        "insertText": "IELINK(${1:IE}, \"${2:リンクテキスト}\", ${3:番号})"
+    },
+    {
+        "label": "IEGETFRAME",
+        "detail": "Web上(IE)のフレームを取得する",
+        "documentation": "指定したフレームを取得します。",
+        "arguments": [
+            { "name": "IE", "description": "IEオブジェクト" },
+            { "name": "フレーム名", "description": "取得するフレームの名前" }
+        ],
+        "returns": "フレームオブジェクト",
+        "example": "frame = IEGETFRAME(IE, \"mainFrame\")\nPRINT frame",
+        "insertText": "IEGETFRAME(${1:IE}, \"${2:フレーム名}\")"
+    },
+    {
+        "label": "ENCODE",
+        "detail": "文字列をエンコードする",
+        "documentation": "指定した文字列をエンコードします。",
+        "arguments": [
+            { "name": "文字列", "description": "エンコードする文字列" },
+            { "name": "エンコード方式", "description": "エンコード方式 (BASE64, URL)" }
+        ],
+        "returns": "エンコードされた文字列",
+        "example": "encoded = ENCODE(\"Hello World\", BASE64)\nPRINT encoded",
+        "insertText": "ENCODE(\"${1:文字列}\", ${2:エンコード方式})"
+    },
+    {
+        "label": "DECODE",
+        "detail": "文字列をデコードする",
+        "documentation": "指定した文字列をデコードします。",
+        "arguments": [
+            { "name": "文字列", "description": "デコードする文字列" },
+            { "name": "デコード方式", "description": "デコード方式 (BASE64, URL)" }
+        ],
+        "returns": "デコードされた文字列",
+        "example": "decoded = DECODE(\"SGVsbG8gV29ybGQ=\", BASE64)\nPRINT decoded",
+        "insertText": "DECODE(\"${1:文字列}\", ${2:デコード方式})"
+    },
+    {
+        "label": "XLOPEN",
+        "detail": "Excelファイルを開く",
+        "documentation": "指定したExcelファイルを開きます。",
+        "arguments": [
+            { "name": "ファイルパス", "description": "開くExcelファイルのパス" }
+        ],
+        "returns": "Excelオブジェクト",
+        "example": "excel = XLOPEN(\"test.xlsx\")\nPRINT excel",
+        "insertText": "XLOPEN(\"${1:ファイルパス}\")"
+    },
+    {
+        "label": "XLCLOSE",
+        "detail": "Excelファイルを閉じる",
+        "documentation": "指定したExcelファイルを閉じます。",
+        "arguments": [
+            { "name": "Excel", "description": "Excelオブジェクト" },
+            { "name": "保存フラグ", "description": "保存するかどうか (TRUE, FALSE)", "optional": true }
+        ],
+        "returns": "なし",
+        "example": "XLCLOSE(excel, TRUE)",
+        "insertText": "XLCLOSE(${1:Excel}, ${2:保存フラグ})"
+    },
+    {
+        "label": "XLACTIVATE",
+        "detail": "Excelシートをアクティブにする",
+        "documentation": "指定したExcelシートをアクティブにします。",
+        "arguments": [
+            { "name": "Excel", "description": "Excelオブジェクト" },
+            { "name": "シート名", "description": "アクティブにするシート名" }
+        ],
+        "returns": "なし",
+        "example": "XLACTIVATE(excel, \"Sheet1\")",
+        "insertText": "XLACTIVATE(${1:Excel}, \"${2:シート名}\")"
+    },
+    {
+        "label": "XLSHEET",
+        "detail": "Excelシートの追加/削除",
+        "documentation": "指定したExcelシートを追加または削除します。",
+        "arguments": [
+            { "name": "Excel", "description": "Excelオブジェクト" },
+            { "name": "シート名", "description": "追加/削除するシート名" },
+            { "name": "削除フラグ", "description": "シートを削除するかどうか (FALSE：追加, TRUE：削除)", "optional": true }
+        ],
+        "returns": "TRUE：正常、 FALSE：処理不能",
+        "example": "result = XLSHEET(excel, \"Sheet1\", TRUE)\nPRINT result",
+        "insertText": "XLSHEET(${1:Excel}, \"${2:シート名}\", ${3:削除フラグ})"
+    },
+    {
+        "label": "XLGETDATA",
+        "detail": "Excelセルから値を取得する",
+        "documentation": "指定したExcelセルから値を取得します。",
+        "arguments": [
+            { "name": "Excel", "description": "Excelオブジェクト" },
+            { "name": "セル範囲", "description": "A1形式、もしくはR1C1形式の行を指定", "optional": true },
+            { "name": "Column", "description": "R1C1形式時の列", "optional": true },
+            { "name": "シート名", "description": "指定シートから取得", "optional": true }
+        ],
+        "returns": "取得した値",
+        "example": "value = XLGETDATA(excel, \"A1\")\nPRINT value",
+        "insertText": "XLGETDATA(${1:Excel}, \"${2:セル範囲}\", ${3:Column}, \"${4:シート名}\")"
+    },
+    {
+        "label": "XLSETDATA",
+        "detail": "Excelセルに値を設定する",
+        "documentation": "指定したExcelセルに値を設定します。",
+        "arguments": [
+            { "name": "Excel", "description": "Excelオブジェクト" },
+            { "name": "値", "description": "設定する値" },
+            { "name": "セル位置", "description": "A1形式、もしくはR1C1形式の行を指定", "optional": true },
+            { "name": "Column", "description": "R1C1形式時の列", "optional": true },
+            { "name": "シート名", "description": "指定シートへ設定", "optional": true },
+            { "name": "文字色", "description": "BGR値にて指定", "optional": true },
+            { "name": "セル色", "description": "BGR値にて指定", "optional": true }
+        ],
+        "returns": "TRUE：正常、 FALSE：処理不能",
+        "example": "result = XLSETDATA(excel, \"Hello\", \"A1\")\nPRINT result",
+        "insertText": "XLSETDATA(${1:Excel}, \"${2:値}\", \"${3:セル位置}\", ${4:Column}, \"${5:シート名}\", ${6:文字色}, ${7:セル色})"
+    },
+    {
+        "label": "RANDOM",
+        "detail": "ランダムな数値を生成する",
+        "documentation": "指定した範囲でランダムな数値を生成します。",
+        "arguments": [
+            { "name": "最小値", "description": "生成する数値の最小値" },
+            { "name": "最大値", "description": "生成する数値の最大値" }
+        ],
+        "returns": "ランダムな数値",
+        "example": "result = RANDOM(1, 100)\nPRINT result",
+        "insertText": "RANDOM(${1:最小値}, ${2:最大値})"
+    },
+    {
+        "label": "ABS",
+        "detail": "絶対値を取得する",
+        "documentation": "指定した数値の絶対値を取得します。",
+        "arguments": [
+            { "name": "数値", "description": "対象の数値" }
+        ],
+        "returns": "絶対値",
+        "example": "result = ABS(-5)\nPRINT result",
+        "insertText": "ABS(${1:数値})"
+    },
+    {
+        "label": "ZCUT",
+        "detail": "数値を切り捨てる",
+        "documentation": "指定した数値を切り捨てます。",
+        "arguments": [
+            { "name": "数値", "description": "対象の数値" }
+        ],
+        "returns": "切り捨てられた数値",
+        "example": "result = ZCUT(5.7)\nPRINT result",
+        "insertText": "ZCUT(${1:数値})"
+    },
+    {
+        "label": "INT",
+        "detail": "整数部分を取得する",
+        "documentation": "指定した数値の整数部分を取得します。",
+        "arguments": [
+            { "name": "数値", "description": "対象の数値" }
+        ],
+        "returns": "整数部分",
+        "example": "result = INT(5.7)\nPRINT result",
+        "insertText": "INT(${1:数値})"
+    },
+    {
+        "label": "CEIL",
+        "detail": "数値を切り上げる",
+        "documentation": "指定した数値を切り上げます。",
+        "arguments": [
+            { "name": "数値", "description": "対象の数値" }
+        ],
+        "returns": "切り上げられた数値",
+        "example": "result = CEIL(5.1)\nPRINT result",
+        "insertText": "CEIL(${1:数値})"
+    },
+    {
+        "label": "ROUND",
+        "detail": "数値を四捨五入する",
+        "documentation": "指定した数値を四捨五入します。",
+        "arguments": [
+            { "name": "数値", "description": "対象の数値" }
+        ],
+        "returns": "四捨五入された数値",
+        "example": "result = ROUND(5.5)\nPRINT result",
+        "insertText": "ROUND(${1:数値})"
+    },
+    {
+        "label": "SQRT",
+        "detail": "平方根を取得する",
+        "documentation": "指定した数値の平方根を取得します。",
+        "arguments": [
+            { "name": "数値", "description": "対象の数値" }
+        ],
+        "returns": "平方根",
+        "example": "result = SQRT(25)\nPRINT result",
+        "insertText": "SQRT(${1:数値})"
+    },
+    {
+        "label": "POWER",
+        "detail": "べき乗を計算する",
+        "documentation": "指定した数値のべき乗を計算します。",
+        "arguments": [
+            { "name": "基数", "description": "基数" },
+            { "name": "指数", "description": "指数" }
+        ],
+        "returns": "べき乗の結果",
+        "example": "result = POWER(2, 3)\nPRINT result",
+        "insertText": "POWER(${1:基数}, ${2:指数})"
+    },
+    {
+        "label": "EXP",
+        "detail": "指数関数を計算する",
+        "documentation": "指定した数値の指数関数を計算します。",
+        "arguments": [
+            { "name": "数値", "description": "対象の数値" }
+        ],
+        "returns": "指数関数の結果",
+        "example": "result = EXP(1)\nPRINT result",
+        "insertText": "EXP(${1:数値})"
+    },
+    {
+        "label": "LN",
+        "detail": "自然対数を計算する",
+        "documentation": "指定した数値の自然対数を計算します。",
+        "arguments": [
+            { "name": "数値", "description": "対象の数値" }
+        ],
+        "returns": "自然対数の結果",
+        "example": "result = LN(2.718)\nPRINT result",
+        "insertText": "LN(${1:数値})"
+    },
+    {
+        "label": "LOGN",
+        "detail": "常用対数を計算する",
+        "documentation": "指定した数値の常用対数を計算します。",
+        "arguments": [
+            { "name": "数値", "description": "対象の数値" }
+        ],
+        "returns": "常用対数の結果",
+        "example": "result = LOGN(10)\nPRINT result",
+        "insertText": "LOGN(${1:数値})"
+    },
+    {
+        "label": "SIN",
+        "detail": "正弦を計算する",
+        "documentation": "指定した角度の正弦を計算します。",
+        "arguments": [
+            { "name": "角度", "description": "対象の角度" }
+        ],
+        "returns": "正弦の結果",
+        "example": "result = SIN(30)\nPRINT result",
+        "insertText": "SIN(${1:角度})"
+    },
+    {
+        "label": "COS",
+        "detail": "余弦を計算する",
+        "documentation": "指定した角度の余弦を計算します。",
+        "arguments": [
+            { "name": "角度", "description": "対象の角度" }
+        ],
+        "returns": "余弦の結果",
+        "example": "result = COS(60)\nPRINT result",
+        "insertText": "COS(${1:角度})"
+    },
+    {
+        "label": "TAN",
+        "detail": "正接を計算する",
+        "documentation": "指定した角度の正接を計算します。",
+        "arguments": [
+            { "name": "角度", "description": "対象の角度" }
+        ],
+        "returns": "正接の結果",
+        "example": "result = TAN(45)\nPRINT result",
+        "insertText": "TAN(${1:角度})"
+    },
+    {
+        "label": "ARCSIN",
+        "detail": "逆正弦を計算する",
+        "documentation": "指定した値の逆正弦を計算します。",
+        "arguments": [
+            { "name": "値", "description": "対象の値" }
+        ],
+        "returns": "逆正弦の結果",
+        "example": "result = ARCSIN(0.5)\nPRINT result",
+        "insertText": "ARCSIN(${1:値})"
+    },
+    {
+        "label": "ARCCOS",
+        "detail": "逆余弦を計算する",
+        "documentation": "指定した値の逆余弦を計算します。",
+        "arguments": [
+            { "name": "値", "description": "対象の値" }
+        ],
+        "returns": "逆余弦の結果",
+        "example": "result = ARCCOS(0.5)\nPRINT result",
+        "insertText": "ARCCOS(${1:値})"
+    },
+    {
+        "label": "ARCTAN",
+        "detail": "逆正接を計算する",
+        "documentation": "指定した値の逆正接を計算します。",
+        "arguments": [
+            { "name": "値", "description": "対象の値" }
+        ],
+        "returns": "逆正接の結果",
+        "example": "result = ARCTAN(1)\nPRINT result",
+        "insertText": "ARCTAN(${1:値})"
+    },
+    {
+        "label": "RANDOM",
+        "detail": "ランダムな数値を生成する",
+        "documentation": "指定した範囲でランダムな数値を生成します。",
+        "arguments": [
+            { "name": "最小値", "description": "生成する数値の最小値" },
+            { "name": "最大値", "description": "生成する数値の最大値" }
+        ],
+        "returns": "ランダムな数値",
+        "example": "result = RANDOM(1, 100)\nPRINT result",
+        "insertText": "RANDOM(${1:最小値}, ${2:最大値})"
+    },
+    {
+        "label": "ABS",
+        "detail": "絶対値を取得する",
+        "documentation": "指定した数値の絶対値を取得します。",
+        "arguments": [
+            { "name": "数値", "description": "対象の数値" }
+        ],
+        "returns": "絶対値",
+        "example": "result = ABS(-5)\nPRINT result",
+        "insertText": "ABS(${1:数値})"
+    },
+    {
+        "label": "ZCUT",
+        "detail": "数値を切り捨てる",
+        "documentation": "指定した数値を切り捨てます。",
+        "arguments": [
+            { "name": "数値", "description": "対象の数値" }
+        ],
+        "returns": "切り捨てられた数値",
+        "example": "result = ZCUT(5.7)\nPRINT result",
+        "insertText": "ZCUT(${1:数値})"
+    },
+    {
+        "label": "INT",
+        "detail": "整数部分を取得する",
+        "documentation": "指定した数値の整数部分を取得します。",
+        "arguments": [
+            { "name": "数値", "description": "対象の数値" }
+        ],
+        "returns": "整数部分",
+        "example": "result = INT(5.7)\nPRINT result",
+        "insertText": "INT(${1:数値})"
+    },
+    {
+        "label": "CEIL",
+        "detail": "数値を切り上げる",
+        "documentation": "指定した数値を切り上げます。",
+        "arguments": [
+            { "name": "数値", "description": "対象の数値" }
+        ],
+        "returns": "切り上げられた数値",
+        "example": "result = CEIL(5.1)\nPRINT result",
+        "insertText": "CEIL(${1:数値})"
+    },
+    {
+        "label": "ROUND",
+        "detail": "数値を四捨五入する",
+        "documentation": "指定した数値を四捨五入します。",
+        "arguments": [
+            { "name": "数値", "description": "対象の数値" }
+        ],
+        "returns": "四捨五入された数値",
+        "example": "result = ROUND(5.5)\nPRINT result",
+        "insertText": "ROUND(${1:数値})"
+    },
+    {
+        "label": "SQRT",
+        "detail": "平方根を取得する",
+        "documentation": "指定した数値の平方根を取得します。",
+        "arguments": [
+            { "name": "数値", "description": "対象の数値" }
+        ],
+        "returns": "平方根",
+        "example": "result = SQRT(25)\nPRINT result",
+        "insertText": "SQRT(${1:数値})"
+    },
+    {
+        "label": "POWER",
+        "detail": "べき乗を計算する",
+        "documentation": "指定した数値のべき乗を計算します。",
+        "arguments": [
+            { "name": "基数", "description": "基数" },
+            { "name": "指数", "description": "指数" }
+        ],
+        "returns": "べき乗の結果",
+        "example": "result = POWER(2, 3)\nPRINT result",
+        "insertText": "POWER(${1:基数}, ${2:指数})"
+    },
+    {
+        "label": "EXP",
+        "detail": "指数関数を計算する",
+        "documentation": "指定した数値の指数関数を計算します。",
+        "arguments": [
+            { "name": "数値", "description": "対象の数値" }
+        ],
+        "returns": "指数関数の結果",
+        "example": "result = EXP(1)\nPRINT result",
+        "insertText": "EXP(${1:数値})"
+    },
+    {
+        "label": "LN",
+        "detail": "自然対数を計算する",
+        "documentation": "指定した数値の自然対数を計算します。",
+        "arguments": [
+            { "name": "数値", "description": "対象の数値" }
+        ],
+        "returns": "自然対数の結果",
+        "example": "result = LN(2.718)\nPRINT result",
+        "insertText": "LN(${1:数値})"
+    },
+    {
+        "label": "LOGN",
+        "detail": "常用対数を計算する",
+        "documentation": "指定した数値の常用対数を計算します。",
+        "arguments": [
+            { "name": "数値", "description": "対象の数値" }
+        ],
+        "returns": "常用対数の結果",
+        "example": "result = LOGN(10)\nPRINT result",
+        "insertText": "LOGN(${1:数値})"
+    },
+    {
+        "label": "SIN",
+        "detail": "正弦を計算する",
+        "documentation": "指定した角度の正弦を計算します。",
+        "arguments": [
+            { "name": "角度", "description": "対象の角度" }
+        ],
+        "returns": "正弦の結果",
+        "example": "result = SIN(30)\nPRINT result",
+        "insertText": "SIN(${1:角度})"
+    },
+    {
+        "label": "COS",
+        "detail": "余弦を計算する",
+        "documentation": "指定した角度の余弦を計算します。",
+        "arguments": [
+            { "name": "角度", "description": "対象の角度" }
+        ],
+        "returns": "余弦の結果",
+        "example": "result = COS(60)\nPRINT result",
+        "insertText": "COS(${1:角度})"
+    },
+    {
+        "label": "TAN",
+        "detail": "正接を計算する",
+        "documentation": "指定した角度の正接を計算します。",
+        "arguments": [
+            { "name": "角度", "description": "対象の角度" }
+        ],
+        "returns": "正接の結果",
+        "example": "result = TAN(45)\nPRINT result",
+        "insertText": "TAN(${1:角度})"
+    },
+    {
+        "label": "ARCSIN",
+        "detail": "逆正弦を計算する",
+        "documentation": "指定した値の逆正弦を計算します。",
+        "arguments": [
+            { "name": "値", "description": "対象の値" }
+        ],
+        "returns": "逆正弦の結果",
+        "example": "result = ARCSIN(0.5)\nPRINT result",
+        "insertText": "ARCSIN(${1:値})"
+    },
+    {
+        "label": "ARCCOS",
+        "detail": "逆余弦を計算する",
+        "documentation": "指定した値の逆余弦を計算します。",
+        "arguments": [
+            { "name": "値", "description": "対象の値" }
+        ],
+        "returns": "逆余弦の結果",
+        "example": "result = ARCCOS(0.5)\nPRINT result",
+        "insertText": "ARCCOS(${1:値})"
+    },
+    {
+        "label": "ARCTAN",
+        "detail": "逆正接を計算する",
+        "documentation": "指定した値の逆正接を計算します。",
+        "arguments": [
+            { "name": "値", "description": "対象の値" }
+        ],
+        "returns": "逆正接の結果",
+        "example": "result = ARCTAN(1)\nPRINT result",
+        "insertText": "ARCTAN(${1:値})"
+    }
+]

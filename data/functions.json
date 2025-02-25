@@ -1,0 +1,496 @@
+{
+  "GETID": {
+    "description": "指定ウィンドウの ID を返す",
+    "parameters": [
+      {
+        "name": "タイトル",
+        "type": "string",
+        "description": "識別したいウィンドウのタイトル"
+      },
+      {
+        "name": "クラス名",
+        "type": "string",
+        "optional": true,
+        "description": "区別に必要でなければ省略可"
+      },
+      {
+        "name": "待ち時間秒",
+        "type": "number", 
+        "optional": true,
+        "description": "確認できるまで指定された秒数待つ (0.01～)"
+      },
+      {
+        "name": "MDI子タイトル",
+        "type": "string",
+        "optional": true,
+        "description": "MDIウィンドウ中の子ウィンドウタイトル"
+      }
+    ],
+    "returns": {
+      "type": "number",
+      "description": "ウィンドウを識別するID (NGの時は -1)"
+    }
+  },
+  "CLKITEM": {
+    "description": "アイテムのクリック",
+    "parameters": [
+      {
+        "name": "ID",
+        "type": "number",
+        "description": "Windowを識別するID"
+      },
+      {
+        "name": "アイテム名",
+        "type": "string",
+        "description": "ボタン、メニュー等のキャプション文字"
+      },
+      {
+        "name": "種別",
+        "type": "number",
+        "optional": true,
+        "description": "CLK_BTN, CLK_LIST等のクリックする種別"
+      },
+      {
+        "name": "On/Off",
+        "type": "boolean",
+        "optional": true,
+        "description": "チェックボックス等でのOn/Off状態"
+      },
+      {
+        "name": "番号",
+        "type": "number",
+        "optional": true,
+        "description": "同名アイテムがある場合の順番"
+      }
+    ],
+    "returns": {
+      "type": "boolean",
+      "description": "TRUE:正常、FALSE:処理不能"
+    }
+  },
+  "MSGBOX": {
+    "description": "メッセージボックスを表示",
+    "parameters": [
+      {
+        "name": "メッセージ",
+        "type": "string",
+        "description": "表示メッセージ"
+      },
+      {
+        "name": "表示ボタン",
+        "type": "number",
+        "optional": true,
+        "description": "BTN_YES, BTN_NO等のボタン種別"
+      },
+      {
+        "name": "X",
+        "type": "number",
+        "optional": true,
+        "description": "表示位置X"
+      },
+      {
+        "name": "Y", 
+        "type": "number",
+        "optional": true,
+        "description": "表示位置Y"
+      }
+    ],
+    "returns": {
+      "type": "number",
+      "description": "押されたボタン種別"
+    }
+  },
+  "CHKBTN": {
+    "description": "ボタン類の状態を返す",
+    "parameters": [
+      {
+        "name": "ID",
+        "type": "number",
+        "description": "Windowを識別するID"
+      },
+      {
+        "name": "アイテム名",
+        "type": "string", 
+        "description": "ボタン、チェックボックス等のキャプション文字"
+      },
+      {
+        "name": "番号",
+        "type": "number",
+        "optional": true,
+        "description": "同名がある場合のオブジェクト順番"
+      },
+      {
+        "name": "ACC指定",
+        "type": "boolean",
+        "optional": true,
+        "description": "アクセシビリティインターフェース使用フラグ"
+      }
+    ],
+    "returns": {
+      "type": "number",
+      "description": "-1:存在しないか無効, 0:OFF, 1:ON, 2:淡色状態"
+    }
+  },
+  "SENDSTR": {
+    "description": "文字列の送信",
+    "parameters": [
+      {
+        "name": "ID",
+        "type": "number",
+        "description": "Windowを識別するID"
+      },
+      {
+        "name": "文字列",
+        "type": "string",
+        "description": "送信する文字列"
+      },
+      {
+        "name": "番号",
+        "type": "number",
+        "optional": true,
+        "description": "エディットコントロールの順番"
+      },
+      {
+        "name": "送信モード",
+        "type": "boolean|number",
+        "optional": true,
+        "description": "FALSE:追加, TRUE:置換, 2:一文字ずつ送信"
+      }
+    ],
+    "returns": {
+      "type": "void"
+    }
+  },
+  "GETSTR": {
+    "description": "文字列の取得",
+    "parameters": [
+      {
+        "name": "ID",
+        "type": "number",
+        "description": "Windowを識別するID"
+      },
+      {
+        "name": "番号",
+        "type": "number",
+        "optional": true,
+        "description": "コントロールの順番"
+      },
+      {
+        "name": "種別",
+        "type": "number",
+        "optional": true,
+        "description": "STR_EDIT, STR_STATIC等の取得種別"
+      }
+    ],
+    "returns": {
+      "type": "string",
+      "description": "取得した文字列"
+    }
+  },
+  "SLEEP": {
+    "description": "指定時間スリープする",
+    "parameters": [
+      {
+        "name": "秒",
+        "type": "number",
+        "description": "スリープする秒数(最小0.001)"
+      }
+    ],
+    "returns": {
+      "type": "void"
+    }
+  },
+  "PEEKCOLOR": {
+    "description": "指定位置の色を得る",
+    "parameters": [
+      {
+        "name": "X",
+        "type": "number",
+        "description": "X座標"
+      },
+      {
+        "name": "Y",
+        "type": "number",
+        "description": "Y座標"
+      },
+      {
+        "name": "RGB指定",
+        "type": "number",
+        "optional": true,
+        "description": "COL_RGB等の色形式指定"
+      }
+    ],
+    "returns": {
+      "type": "number",
+      "description": "BGR値またはRGB値での色情報"
+    }
+  },
+  "CHKIMG": {
+    "description": "指定画像が画面上にあるかチェック",
+    "parameters": [
+      {
+        "name": "画像名",
+        "type": "string",
+        "description": "BMP形式の画像ファイル名"
+      },
+      {
+        "name": "透過色指定",
+        "type": "number",
+        "optional": true,
+        "description": "透過色の指定(0-4)または-1で形のみ"
+      },
+      {
+        "name": "x1",
+        "type": "number",
+        "optional": true,
+        "description": "サーチ範囲左上X"
+      },
+      {
+        "name": "y1",
+        "type": "number",
+        "optional": true,
+        "description": "サーチ範囲左上Y"  
+      },
+      {
+        "name": "x2",
+        "type": "number",
+        "optional": true,
+        "description": "サーチ範囲右下X"
+      },
+      {
+        "name": "y2",
+        "type": "number",
+        "optional": true,
+        "description": "サーチ範囲右下Y"
+      }
+    ],
+    "returns": {
+      "type": "boolean",
+      "description": "TRUE:見つかった、FALSE:見つからない"
+    }
+  },
+  "GETTIME": {
+    "description": "日付、時間の取得",
+    "parameters": [
+      {
+        "name": "±n日",
+        "type": "number",
+        "optional": true,
+        "description": "基準日からの加減日数"
+      },
+      {
+        "name": "基準日",
+        "type": "string",
+        "optional": true,
+        "description": "YYYY/MM/DD形式の基準日付"
+      }
+    ],
+    "returns": {
+      "type": "number",
+      "description": "2000年1月1日からの秒数"
+    }
+  },
+  "EVAL": {
+    "description": "文字列を評価し値を返す",
+    "parameters": [
+      {
+        "name": "文字列",
+        "type": "string",
+        "description": "評価する文字列式"
+      }
+    ],
+    "returns": {
+      "type": "any",
+      "description": "評価結果"
+    }
+  },
+  "CTRLWIN": {
+    "description": "ウィンドウコントロール",
+    "parameters": [
+      {
+        "name": "ID",
+        "type": "number",
+        "description": "Windowを識別するID"
+      },
+      {
+        "name": "命令",
+        "type": "number",
+        "description": "CLOSE/ACTIVATE/HIDE/SHOW/MIN/MAX/NORMAL/TOPMOST/NOTOPMOST/TOPNOACTV等"
+      }
+    ],
+    "returns": {
+      "type": "void"
+    }
+  },
+  "GETITEM": {
+    "description": "キャプション文字やリスト等を全て取得",
+    "parameters": [
+      {
+        "name": "ID",
+        "type": "number",
+        "description": "Windowを識別するID"
+      },
+      {
+        "name": "種別",
+        "type": "number",
+        "description": "ITM_BTN/ITM_LIST/ITM_TAB等の取得種別"
+      },
+      {
+        "name": "番号",
+        "type": "number",
+        "optional": true,
+        "description": "複数存在時の順番指定(-1で全コントロール)"
+      },
+      {
+        "name": "リストビュー列",
+        "type": "number",
+        "optional": true,
+        "description": "リストビュー時の列指定(-1でカラム名取得)"
+      },
+      {
+        "name": "ディセーブルフラグ",
+        "type": "boolean",
+        "optional": true,
+        "description": "ディセーブルな物を除外するか"
+      },
+      {
+        "name": "最大取得数",
+        "type": "number",
+        "optional": true,
+        "description": "アクセシビリティ経由時の最大取得数"
+      }
+    ],
+    "returns": {
+      "type": "number",
+      "description": "取得した数を返す"
+    }
+  },
+  "GETSLCTLST": {
+    "description": "COMBOBOX/LISTBOX等での選択項目を取得",
+    "parameters": [
+      {
+        "name": "ID",
+        "type": "number",
+        "description": "Windowを識別するID"
+      },
+      {
+        "name": "番号",
+        "type": "number",
+        "optional": true,
+        "description": "左上からの順番(1から指定)"
+      },
+      {
+        "name": "リストビュー列",
+        "type": "number",
+        "optional": true,
+        "description": "リストビュー時の列を指定"
+      }
+    ],
+    "returns": {
+      "type": "string",
+      "description": "選択されている項目(複数選択時はタブで結合)"
+    }
+  },
+  "SETSLIDER": {
+    "description": "スライダーの値を設定",
+    "parameters": [
+      {
+        "name": "ID",
+        "type": "number",
+        "description": "Windowを識別するID"
+      },
+      {
+        "name": "値",
+        "type": "number",
+        "description": "設定する値"
+      },
+      {
+        "name": "番号",
+        "type": "number",
+        "optional": true,
+        "description": "左上からの順番(1から指定)"
+      }
+    ],
+    "returns": {
+      "type": "boolean",
+      "description": "TRUE:正常、FALSE:処理不能"
+    }
+  },
+  "GETSLIDER": {
+    "description": "スライダーの値を取得",
+    "parameters": [
+      {
+        "name": "ID",
+        "type": "number",
+        "description": "Windowを識別するID"
+      },
+      {
+        "name": "番号",
+        "type": "number",
+        "optional": true,
+        "description": "左上からの順番(1から指定)"
+      },
+      {
+        "name": "パラメータ",
+        "type": "number",
+        "optional": true,
+        "description": "SLD_POS/SLD_MIN/SLD_MAX等の取得項目"
+      }
+    ],
+    "returns": {
+      "type": "number",
+      "description": "取得した値"
+    }
+  },
+  "SCKEY": {
+    "description": "ショートカットキーの実行",
+    "parameters": [
+      {
+        "name": "ID",
+        "type": "number",
+        "description": "Windowを識別するID"
+      },
+      {
+        "name": "キー",
+        "type": "number|string",
+        "description": "アルファベット1文字もしくは仮想キー(VK_*)"
+      },
+      {
+        "name": "キー2",
+        "type": "number|string",
+        "optional": true,
+        "description": "追加のキー"
+      },
+      {
+        "name": "キー3",
+        "type": "number|string",
+        "optional": true,
+        "description": "追加のキー"
+      },
+      {
+        "name": "キー4",
+        "type": "number|string",
+        "optional": true,
+        "description": "追加のキー"
+      }
+    ],
+    "returns": {
+      "type": "void"
+    }
+  },
+  "GETALLWIN": {
+    "description": "全ウィンドウのIDを取得",
+    "parameters": [
+      {
+        "name": "ID",
+        "type": "number",
+        "optional": true,
+        "description": "親ウィンドウID(子ウィンドウ取得時)"
+      }
+    ],
+    "returns": {
+      "type": "number",
+      "description": "取得したWindowの数(ALL_WIN_ID[]に格納)"
+    }
+  }
+}
