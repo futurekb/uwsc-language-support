@@ -1,0 +1,62 @@
+[
+  { "label": "TRUE", "detail": "真", "documentation": "論理真を表す組込み定数です（値: 1）。" },
+  { "label": "FALSE", "detail": "偽", "documentation": "論理偽を表す組込み定数です（値: 0）。" },
+  { "label": "NULL", "detail": "ヌルポインタ", "documentation": "ヌルポインタを表す組込み定数です。" },
+  { "label": "EMPTY", "detail": "未設定値", "documentation": "値が空であることを表す組込み定数です。" },
+  { "label": "NOTHING", "detail": "オブジェクトなし", "documentation": "オブジェクト参照が無い状態を表す組込み定数です。" },
+
+  { "label": "LEFT", "detail": "マウス左ボタン", "documentation": "マウス左ボタン指定に利用する定数です。" },
+  { "label": "RIGHT", "detail": "マウス右ボタン", "documentation": "マウス右ボタン指定に利用する定数です。" },
+  { "label": "MIDDLE", "detail": "マウス中ボタン", "documentation": "マウス中ボタン指定に利用する定数です。" },
+  { "label": "CLICK", "detail": "クリック", "documentation": "クリック操作を指定する定数です。" },
+  { "label": "DOWN", "detail": "押下", "documentation": "押下操作を指定する定数です。" },
+  { "label": "UP", "detail": "解放", "documentation": "解放操作を指定する定数です。" },
+
+  { "label": "COL_RGB", "detail": "RGBカラー指定", "documentation": "色取得系関数で RGB 値として扱う指定です。" },
+  { "label": "COL_R", "detail": "赤成分", "documentation": "色取得系関数で赤成分を指定する定数です。" },
+  { "label": "COL_G", "detail": "緑成分", "documentation": "色取得系関数で緑成分を指定する定数です。" },
+  { "label": "COL_B", "detail": "青成分", "documentation": "色取得系関数で青成分を指定する定数です。" },
+
+  { "label": "SLCT_BTN", "detail": "選択ボックス: ボタン", "documentation": "SLCTBOX の種別指定でボタン表示を選ぶ定数です。" },
+  { "label": "SLCT_CHK", "detail": "選択ボックス: チェック", "documentation": "SLCTBOX の種別指定でチェックボックス表示を選ぶ定数です。" },
+  { "label": "SLCT_RDO", "detail": "選択ボックス: ラジオ", "documentation": "SLCTBOX の種別指定でラジオボタン表示を選ぶ定数です。" },
+
+  { "label": "ITM_BTN", "detail": "アイテム種別: ボタン", "documentation": "GETITEM の種別指定でボタン/チェック/ラジオを取得します。" },
+  { "label": "ITM_LIST", "detail": "アイテム種別: リスト", "documentation": "GETITEM の種別指定でリスト/コンボを取得します。" },
+  { "label": "ITM_TAB", "detail": "アイテム種別: タブ", "documentation": "GETITEM の種別指定でタブを取得します。" },
+  { "label": "ITM_MENU", "detail": "アイテム種別: メニュー", "documentation": "GETITEM の種別指定でメニューを取得します。" },
+  { "label": "ITM_TREEVIEW", "detail": "アイテム種別: ツリービュー", "documentation": "GETITEM の種別指定でツリービューを取得します。" },
+  { "label": "ITM_LISTVIEW", "detail": "アイテム種別: リストビュー", "documentation": "GETITEM の種別指定でリストビューを取得します。" },
+  { "label": "ITM_EDIT", "detail": "アイテム種別: エディット", "documentation": "GETITEM の種別指定でエディットを取得します。" },
+  { "label": "ITM_STATIC", "detail": "アイテム種別: スタティック", "documentation": "GETITEM の種別指定でスタティックを取得します。" },
+  { "label": "ITM_STATUSBAR", "detail": "アイテム種別: ステータスバー", "documentation": "GETITEM の種別指定でステータスバーを取得します。" },
+  { "label": "ITM_TOOLBAR", "detail": "アイテム種別: ツールバー", "documentation": "GETITEM の種別指定でツールバーを取得します。" },
+
+  { "label": "BTN_LEFT", "detail": "ボタン: 左", "documentation": "ボタン操作指定に利用する定数です。" },
+  { "label": "BTN_RIGHT", "detail": "ボタン: 右", "documentation": "ボタン操作指定に利用する定数です。" },
+
+  { "label": "ACC_NAME", "detail": "アクセシビリティ: 名前", "documentation": "ACC 系取得関数で名前を取得する指定です。" },
+  { "label": "ACC_VALUE", "detail": "アクセシビリティ: 値", "documentation": "ACC 系取得関数で値を取得する指定です。" },
+  { "label": "ACC_ROLE", "detail": "アクセシビリティ: 役割", "documentation": "ACC 系取得関数で役割を取得する指定です。" },
+  { "label": "ACC_STATE", "detail": "アクセシビリティ: 状態", "documentation": "ACC 系取得関数で状態を取得する指定です。" },
+
+  { "label": "CLK_BTN", "detail": "クリック種別: ボタン", "documentation": "クリック関数の種別指定に利用する定数です。" },
+  { "label": "CLK_DBL", "detail": "クリック種別: ダブルクリック", "documentation": "クリック関数の種別指定に利用する定数です。" },
+
+  { "label": "GET_WIN_DIR", "detail": "Windowsディレクトリ", "documentation": "Windows ディレクトリを返す組込み取得値です。" },
+  { "label": "GET_SYS_DIR", "detail": "Systemディレクトリ", "documentation": "System ディレクトリを返す組込み取得値です。" },
+  { "label": "GET_CUR_DIR", "detail": "カレントディレクトリ", "documentation": "カレントディレクトリを返す組込み取得値です。" },
+  { "label": "GET_APPDATA_DIR", "detail": "AppDataディレクトリ", "documentation": "AppData ディレクトリを返す組込み取得値です。" },
+  { "label": "GET_UWSC_DIR", "detail": "UWSCディレクトリ", "documentation": "UWSC 本体ディレクトリを返す組込み取得値です。" },
+
+  { "label": "G_SCREEN_W", "detail": "画面幅", "documentation": "画面幅を格納する組込み変数です。" },
+  { "label": "G_SCREEN_H", "detail": "画面高さ", "documentation": "画面高さを格納する組込み変数です。" },
+  { "label": "G_MOUSE_X", "detail": "マウスX", "documentation": "現在のマウスカーソル X 座標を格納する組込み変数です。" },
+  { "label": "G_MOUSE_Y", "detail": "マウスY", "documentation": "現在のマウスカーソル Y 座標を格納する組込み変数です。" },
+  { "label": "G_IMG_X", "detail": "画像ヒットX", "documentation": "画像検索でヒットした X 座標を格納する組込み変数です。" },
+  { "label": "G_IMG_Y", "detail": "画像ヒットY", "documentation": "画像検索でヒットした Y 座標を格納する組込み変数です。" },
+  { "label": "ALL_IMG_X", "detail": "画像ヒットX配列", "documentation": "画像検索結果の X 座標配列を格納する組込み配列です。" },
+  { "label": "ALL_IMG_Y", "detail": "画像ヒットY配列", "documentation": "画像検索結果の Y 座標配列を格納する組込み配列です。" },
+  { "label": "ALL_ITEM_LIST", "detail": "アイテム取得結果配列", "documentation": "GETITEM の取得結果を格納する組込み配列です。" },
+  { "label": "PARAM_STR", "detail": "起動パラメータ配列", "documentation": "スクリプト起動時引数を格納する組込み配列です。" }
+]

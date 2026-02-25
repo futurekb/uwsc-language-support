@@ -1,10 +1,15 @@
 import * as vscode from 'vscode';
 import { UWSCCompletionProvider } from './providers/completionProvider';
+import { UWSCHoverProvider } from './providers/hoverProvider';
+import { UWSCSignatureHelpProvider } from './providers/signatureHelpProvider';
 
 export function activate(context: vscode.ExtensionContext) {
     const uwscSelector = { language: 'uwsc', scheme: 'file' };
+
     context.subscriptions.push(
-        vscode.languages.registerCompletionItemProvider(uwscSelector, new UWSCCompletionProvider(), '.')
+        vscode.languages.registerCompletionItemProvider(uwscSelector, new UWSCCompletionProvider(), '.', '(', ','),
+        vscode.languages.registerHoverProvider(uwscSelector, new UWSCHoverProvider()),
+        vscode.languages.registerSignatureHelpProvider(uwscSelector, new UWSCSignatureHelpProvider(), '(', ',')
     );
 }
 
