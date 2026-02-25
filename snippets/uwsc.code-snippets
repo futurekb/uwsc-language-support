@@ -1,0 +1,29 @@
+{
+  "IF block": {
+    "prefix": "if",
+    "body": [
+      "IF ${1:condition} THEN",
+      "    ${0}",
+      "ENDIF"
+    ],
+    "description": "UWSC IF文のテンプレート"
+  },
+  "FOR block": {
+    "prefix": "for",
+    "body": [
+      "FOR ${1:i} = ${2:1} TO ${3:10}",
+      "    ${0}",
+      "NEXT"
+    ],
+    "description": "UWSC FOR文のテンプレート"
+  },
+  "PROCEDURE block": {
+    "prefix": "proc",
+    "body": [
+      "PROCEDURE ${1:SampleProc}(${2:arg})",
+      "    ${0}",
+      "ENDPROCEDURE"
+    ],
+    "description": "UWSC PROCEDUREのテンプレート"
+  }
+}

@@ -10,8 +10,7 @@
     "Programming Languages"
   ],
   "activationEvents": [
-    "onLanguage:UWSC",
-    "onLanguage:uws"
+    "onLanguage:uwsc"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -26,6 +25,19 @@
           ".uws"
         ],
         "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "uwsc",
+        "scopeName": "source.uwsc",
+        "path": "./syntaxes/uwsc.tmLanguage.json"
+      }
+    ],
+    "snippets": [
+      {
+        "language": "uwsc",
+        "path": "./snippets/uwsc.code-snippets"
       }
     ]
   },

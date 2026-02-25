@@ -1,0 +1,17 @@
+[
+  { "label": "EXPLICIT", "detail": "OPTION項目", "documentation": "全変数に DIM または PUBLIC 宣言を必須にします。" },
+  { "label": "SAMESTR", "detail": "OPTION項目", "documentation": "文字比較・置換・検索で大文字小文字を区別します。" },
+  { "label": "OPTPUBLIC", "detail": "OPTION項目", "documentation": "PUBLIC 変数の重複定義を禁止します。" },
+  { "label": "OPTFINALLY", "detail": "OPTION項目", "documentation": "Try-Finally で強制終了時も Finally 部を実行します。" },
+  { "label": "SPECIALCHAR", "detail": "OPTION項目", "documentation": "特殊文字（<#CR><#DBL><#TAB>）の実行時変換を無効化します。" },
+  { "label": "SHORTCIRCUIT", "detail": "OPTION項目", "documentation": "論理演算で短絡評価を有効化します。" },
+  { "label": "NOSTOPHOTKEY", "detail": "OPTION項目", "documentation": "停止ホットキーを無効化します。" },
+  { "label": "TOPSTOPFORM", "detail": "OPTION項目", "documentation": "STOP ボタンウィンドウを最前面固定にします。" },
+  { "label": "FIXBALLOON", "detail": "OPTION項目", "documentation": "吹き出し表示を仮想デスクトップ全画面に表示します。" },
+  { "label": "DEFAULTFONT", "detail": "OPTION項目", "documentation": "BALLOON / MSGBOX 等で使うフォントを変更します。例: OPTION DEFAULTFONT=\"ＭＳ ゴシック,16\"" },
+  { "label": "POSITION", "detail": "OPTION項目", "documentation": "UI 表示位置を変更します。例: OPTION POSITION=100,200" },
+  { "label": "LOGPATH", "detail": "OPTION項目", "documentation": "ログファイルのパス・ファイル名を変更します。" },
+  { "label": "LOGLINES", "detail": "OPTION項目", "documentation": "ログの最大行数を変更します。" },
+  { "label": "LOGFILE", "detail": "OPTION項目", "documentation": "ログ出力モードを変更します。" },
+  { "label": "DLGTITLE", "detail": "OPTION項目", "documentation": "INPUT / MSGBOX / SLCTBOX のタイトルを変更します。" }
+]
