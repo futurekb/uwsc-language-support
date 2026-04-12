@@ -19,6 +19,6 @@ Thumbs.db
 /tmp/
 
 # Used by dotenv library to load environment variables.
-# .env
+.venv/
 
 .vscode-test/

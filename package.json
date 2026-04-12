@@ -1,14 +1,38 @@
 {
   "name": "uwsc-language-support",
   "displayName": "UWSC Language Support",
-  "description": "UWSC language support for VS Code",
-  "version": "0.0.1",
+  "description": "UWSC（UMI Windows Script Controller）向け VS Code 拡張機能。シンタックスハイライト・IntelliSense補完・ホバー説明・シグネチャヘルプ・スニペット対応。",
+  "version": "0.1.0",
+  "publisher": "futurekb",
+  "author": {
+    "name": "futurekb"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/futurekb/uwsc-language-support.git"
+  },
+  "bugs": {
+    "url": "https://github.com/futurekb/uwsc-language-support/issues"
+  },
+  "homepage": "https://github.com/futurekb/uwsc-language-support#readme",
+  "keywords": [
+    "uwsc",
+    "uws",
+    "windows",
+    "automation",
+    "rpa",
+    "script",
+    "language",
+    "syntax"
+  ],
+  "categories": [
+    "Programming Languages",
+    "Snippets"
+  ],
   "engines": {
     "vscode": "^1.85.0"
   },
-  "categories": [
-    "Programming Languages"
-  ],
   "activationEvents": [
     "onLanguage:uwsc"
   ],
@@ -45,11 +69,14 @@
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./ && npm run copy-files",
     "copy-files": "cp -r src/data out/",
-    "watch": "tsc -watch -p ./"
+    "watch": "tsc -watch -p ./",
+    "package": "vsce package",
+    "publish": "vsce publish"
   },
   "devDependencies": {
     "@types/node": "^20.17.11",
     "@types/vscode": "^1.85.0",
+    "@vscode/vsce": "^3.0.0",
     "typescript": "^5.0.0"
   }
 }
